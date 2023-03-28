@@ -133,7 +133,7 @@ class TorchTrainer(TrainerImplementor):
         return df
 
     def load_model(self, model, path):
-        logging.warning(f'Loading Torch models from path :{path}')
+        logging.info(f'Loading Torch models from path :{path}')
         checkpoint = torch.load(get_latest_checkpoint(path))
         if not isinstance(model, PlModel):
             model = PlModel(model)

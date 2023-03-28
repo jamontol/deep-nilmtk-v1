@@ -27,10 +27,10 @@ class TempDataLoader(torch.utils.data.Dataset):
             self.status = compute_status(self.appliance, appliances_labels=params['appliances'],
                                          threshold_method=params['threshold_method'])
             self.params, self.appliance  = normalize(self.appliance.reshape(-1,1), params['target_norm'])
-            logging.warning(f"inputs {self.meter.shape}, targets {self.appliance.shape}")
+            logging.info(f"inputs {self.meter.shape}, targets {self.appliance.shape}")
         else:
             self.appliance = None
-            logging.warning(f"inputs {self.meter.shape}")
+            logging.info(f"inputs {self.meter.shape}")
 
         self.len = len(self.meter) - (self.length + 2*self.border ) -1
 

@@ -46,7 +46,7 @@ def denormalize(data, type='z-norm', params=None):
     logging.info(f'The sequences are being denormalized  using the {type}')
     if type == 'z-norm':
         assert params is not None, f'Please specify the parameters for {type}'
-        logging.warning(f"De-normalizing the target power using the mean={params['mean']}, and std={params['std']}")
+        logging.info(f"De-normalizing the target power using the mean={params['mean']}, and std={params['std']}")
         return z_denorm(data, params['mean'], params['std'])
     elif type == 'min-max':
         assert params is not None, f'Please specify the parameters for {type}'

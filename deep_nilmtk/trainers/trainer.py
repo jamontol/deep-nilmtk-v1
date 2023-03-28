@@ -164,7 +164,7 @@ class Trainer:
                                             hparams=self.hparams)
 
         y_pred = self.trainer_imp.predict(model, data, self.hparams['batch_size'])
-        logging.error(f"{y_pred.shape}")
+        logging.info(f"{y_pred.shape}")
         return y_pred
 
 

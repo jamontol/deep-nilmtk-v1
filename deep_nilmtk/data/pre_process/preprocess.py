@@ -37,7 +37,7 @@ def preprocess(mains,  norm_type, submains=None, params=None):
     :param submains: the power of appliances
     :return: pd.DataFrame, pd.DataFrame, dict
     """
-    logging.warning("Data is preprocessed using default pre-preocessing function")
+    logging.warning("Data is preprocessed using default pre-preprocessing function")
     logging.info(f"Number of data Sources is :{len(mains)} ")
     mains = np.concatenate(mains, axis=0)
     logging.info(f"Shape of data after concatenation is :{mains.shape} ")

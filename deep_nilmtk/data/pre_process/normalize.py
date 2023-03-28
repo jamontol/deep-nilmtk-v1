@@ -10,7 +10,7 @@ def z_norm(data,  params=None):
     :param data: 2d array of power consumption
     :return: the mean power consumption, the std power consumption, and the normalized power
     """
-    logging.warning(f'Data shape is {len(data)}')
+    logging.info(f'Data shape is {len(data)}')
     if len(data.shape) == 1:
         data = data.reshape(-1,1)
     mean = params['mean'] if params is not None else data.mean(axis=0).reshape(-1,data.shape[-1])
@@ -57,9 +57,9 @@ def normalize(data, type='z-norm', params=None):
     :param type: type of normalization
     :return:
     """
-    logging.info(f'The sequences are being normalized  using the {type}')
+    logging.info(f'The sequences are being normalized using the {type}')
     if params is not None:
-        logging.warning(f"A predefined set of parameters is used :{params}")
+        logging.info(f"A predefined set of parameters is used :{params}")
     if type == 'z-norm':
         return z_norm(data, params)
     elif type =='min-max':
