@@ -10,6 +10,7 @@ import torch.nn.functional as F
 from tqdm import tqdm
 import sys
 
+import deep_nilmtk.data.loader.pytorch as TorchLoader
 from .layers import create_linear, create_conv1, create_deconv1
 
 from torch.nn import TransformerEncoderLayer
@@ -215,8 +216,8 @@ class BERT4NILM(nn.Module):
 
         # self.C0 = [params['lambda'][params['appliances'][0]]] if 'lambda' in params else [1e-6]
 
-        self.main_mu = params['main_mu']
-        self.main_std = params['main_std']
+        self.main_mu = params['main_mu']   # not used
+        self.main_std = params['main_std'] # not used
 
         self.set_hpramas(self.cutoff, self.threshold, self.min_on, self.min_off)
 
@@ -432,13 +433,14 @@ class BERT4NILM(nn.Module):
         return results
 
     @staticmethod
-    def get_template(self):
+    def get_template():
         return {
             'backend': 'pytorch',
+            'model_name': 'BERT4NILM',
             # 'in_size': sequence_length,
             'out_size': 1,
             'feature_type': 'mains',
-            'loader_class': 'z-norm',
+            'loader_class': TorchLoader.BERTDataset,
             'target_norm': 'z-norm',
             'seq_type': 'seq2point',
             'learning_rate': 10e-5,
