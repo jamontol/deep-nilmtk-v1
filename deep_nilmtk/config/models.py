@@ -1,17 +1,21 @@
-import deep_nilmtk.models.tensorflow as KerasModels
+#import deep_nilmtk.models.tensorflow as KerasModels
 import deep_nilmtk.models.pytorch as TorchModels
 
-import deep_nilmtk.data.loader.tensorflow as KerasLoader
+#import deep_nilmtk.data.loader.tensorflow as KerasLoader
 import deep_nilmtk.data.loader.pytorch as TorchLoader
 
-
-__models__ = {
+# currently not in use:
+"""
     'tensorflow': {
         'Seq2Pointbaseline':{
             'model': KerasModels.Seq2Point,
             'loader':None
         }
-    },
+    }
+"""
+
+__models__ = {
+    'tensorflow': None,
     'pytorch':{
             # =============================================================================
             #     Baseline models from nilmtk-contrib in pytorch
