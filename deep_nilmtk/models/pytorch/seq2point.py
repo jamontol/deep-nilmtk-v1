@@ -152,7 +152,7 @@ class S2P(nn.Module):
         else:
 
             results = {"pred":pred}
-        logging.warning(f'the max value predicted is {pred.max()}')
+        logging.info(f'the max value predicted is {pred.max()}')
         return results
 
 class Seq2Point(S2P):
@@ -263,7 +263,7 @@ class SAED(S2P):
         params = S2P.get_template()
         logging.warning('the in_size and max_nb_epochs must be added to the list of this parameters')
         params.update({
-            'model_name': 'SAED'
+            'model_name': 'SAED_model'
         })
         return params
 
