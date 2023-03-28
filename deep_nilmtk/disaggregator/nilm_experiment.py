@@ -3,7 +3,7 @@ from nilmtk.disaggregate import Disaggregator
 import warnings
 from deep_nilmtk.data.pre_process import preprocess, generate_features
 from deep_nilmtk.data.post_process import postprocess
-from deep_nilmtk.trainers import Trainer, TorchTrainer, KerasTrainer
+from deep_nilmtk.trainers import Trainer, TorchTrainer#, KerasTrainer
 from deep_nilmtk.config import get_exp_parameters
 from deep_nilmtk.utils import check_model_backend
 from collections import OrderedDict
@@ -29,7 +29,9 @@ class NILMExperiment(Disaggregator):
         super().__init__()
 
         hparams = get_exp_parameters()
-        hparams = vars(hparams.parse_args())
+        # hparams = vars(hparams.parse_args())
+        hparams, remaining_args = hparams.parse_known_args()
+        hparams = vars(hparams)
         hparams.update(params)
         self.hparams = hparams
         self.MODEL_NAME = hparams['model_name']
@@ -76,8 +78,8 @@ class NILMExperiment(Disaggregator):
         """
         if self.hparams['backend'] == 'pytorch':
             return TorchTrainer()
-        elif self.hparams['backend'] == 'tensorflow':
-            return KerasTrainer()
+        #elif self.hparams['backend'] == 'tensorflow':
+        #    return KerasTrainer()
         else:
             raise Exception('The specified deep learning framework is not compatible, possible values for backend are : pytorch, tensorflow')
 
