@@ -51,7 +51,7 @@ class TorchTrainer(TrainerImplementor):
         best_checkpoint = get_latest_checkpoint(f'{results_path}/{chkpt_path}')
         self.batch_size = batch_size
 
-        pl_model = PlModel(model, optimizer=optimizer, learning_rate=learning_rate, patience_optim= learning_rate)
+        pl_model = PlModel(model, optimizer=optimizer, learning_rate=learning_rate, patience_optim=patience_optim)
 
         callbacks_lst, logger = self.log_init(f'{results_path}/{chkpt_path}',results_path, logs_path, exp_name, version)
         logging.info(f'Training started for {epochs} epochs')
