@@ -20,6 +20,7 @@
 
 </div>
 <div align="center"> 
+
 [![Python](https://img.shields.io/pypi/pyversions/tensorflow.svg?style=plastic)]()
 
 
@@ -77,7 +78,7 @@ pip install .
 - *separate experiments for different models (because they sometimes have different output lengths, e.g. Seq2Point vs. Seq2Seq)*
 
 
-|Specified in Experiment Template (e.g. `ukdale_template.py` or `redd_template.py`)|Specified in main script
+|Specified in Template (e.g. `ukdale_template.py` or `redd_template.py`)|Specified in main script
 |----------------------------------------------------------------------------------|-
 |dataset              |experiment name
 |train/test period    |results path
