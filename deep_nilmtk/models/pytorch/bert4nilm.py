@@ -200,12 +200,11 @@ class BERT4NILM(nn.Module):
     def __init__(self, params):
 
         super().__init__()
-        
 
         self.original_len = params['in_size'] if 'in_size' in params else 99
         self.output_size = len(params['appliances']) if params['multi_appliance'] else 1
         self.stride = params['stride'] if 'stride' in params else 1
-
+                
         # The original mode was proposed for several appliances
         self.threshold = [params['threshold'][params['appliances'][0]]] if 'threshold' in params else None
 
@@ -221,7 +220,7 @@ class BERT4NILM(nn.Module):
 
         self.set_hpramas(self.cutoff, self.threshold, self.min_on, self.min_off)
 
-        self.C0 = torch.tensor([params['c0'] if 'c0' in params else .3])
+        self.C0 = torch.tensor([params['c0'][params['appliances'][0]] if 'c0' in params else .3])
 
         self.latent_len = int(self.original_len / 2)
         self.dropout_rate = params['dropout'] if 'dropout' in params else 0.2
@@ -360,7 +359,7 @@ class BERT4NILM(nn.Module):
 
     def compute_status(self, data):
         """
-        Calculates teh states for the  target data based on the threshold
+        Calculates the states for the  target data based on the threshold
         :param data: The target data
         :type data: tensor
         :return: The operational states

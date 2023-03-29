@@ -8,10 +8,10 @@ class BERTDataset(torch.utils.data.Dataset):
     def __init__(self, inputs, targets=None, params=None):
 
         self.x = inputs
-
-        self.threshold = list(params['threshold'].values()) if 'threshold' in params else None
-        self.min_on = list(params['min_on'].values()) if 'min_on' in params else None
-        self.min_off = list(params['min_off'].values()) if 'min_off' in params else None
+        print(params)
+        self.threshold =  [params['threshold'][params['appliances'][0]]] if 'threshold' in params else None
+        self.min_on =  [params['min_on'][params['appliances'][0]]] if 'min_on' in params else None
+        self.min_off =  [params['min_off'][params['appliances'][0]]] if 'min_off' in params else None
         self.window_size = params['in_size'] if 'in_size' in params else 480
         self.stride = params['stride'] if 'stride' in params else 1
         self.mask_prob = params['mask_prob'] if 'mask_prob' in params else .05
@@ -21,7 +21,7 @@ class BERTDataset(torch.utils.data.Dataset):
             self.y = targets.values.reshape(-1, 1) if len(targets.values.shape) == 1 else targets.values
             self.columns = self.y.shape[1]
             self.status = self.compute_status(self.y)
-            print(self.status.sum())
+            #print(self.status.sum())
 
         self.len = int(np.ceil((len(self.x) - self.window_size) / self.stride) + 1)
 

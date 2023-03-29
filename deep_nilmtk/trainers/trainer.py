@@ -152,7 +152,7 @@ class Trainer:
             app:  self.model_class({**self.hparams, **{'appliances':[app]}}  if hparams is None else {**hparams, **{'appliances':[app]}}) for app in self.appliances
         }
 
-    def predict_model(self, mains, model, chkpt):
+    def predict_model(self, mains, model, chkpt, app):
         # load the model from the checkpoint
 
         model = self.trainer_imp.load_model(model, chkpt)
@@ -161,7 +161,7 @@ class Trainer:
                                             in_size=self.hparams['in_size'],
                                             out_size=self.hparams['out_size'],
                                             point_position=self.hparams['point_position'], loader=self.loader_class,
-                                            hparams=self.hparams)
+                                            hparams={**self.hparams, **{'appliances':[app]}})
 
         y_pred = self.trainer_imp.predict(model, data, self.hparams['batch_size'])
         logging.info(f"{y_pred.shape}")
@@ -187,10 +187,10 @@ class Trainer:
             print(mains.shape)
             chkpt = f'{self.hparams["results_path"]}/{self.hparams["checkpoints_path"]}/{appliance}/{self.hparams["model_name"]}/version_{v}'
             # if CV is used the predictions are averaged over the models trained on different folds
-            y_pred = self.predict_model( mains, self.models[appliance], chkpt) if self.hparams['kfolds']<=1 else \
+            y_pred = self.predict_model( mains, self.models[appliance], chkpt, appliance) if self.hparams['kfolds']<=1 else \
                 np.array(
                     [
-                        self.predict_model(mains, self.models[appliance][fold], f"{chkpt}/{fold+1}") for  fold in range(self.hparams['kfolds'])
+                        self.predict_model(mains, self.models[appliance][fold], f"{chkpt}/{fold+1}", appliance) for  fold in range(self.hparams['kfolds'])
                     ]
                 ).mean(axis=0)
 

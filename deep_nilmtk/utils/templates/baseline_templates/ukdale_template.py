@@ -34,8 +34,33 @@ test_experiment = {
 
         },
         'metrics': ['mae', 'nde', 'rmse', 'f1score'],
+    },
+    'app_activation_params': {'threshold': {'kettle': 2000,
+                                            'fridge': 50,
+                                            'washing machine': 20,
+                                            'microwave': 200,
+                                            ' dish washer': 10},
+                              'cutoff': {'kettle': 3100,
+                                          'fridge': 300,
+                                          'washing machine': 2500,
+                                          'microwave': 3000,
+                                          'dish washer': 2500},
+                              'min_on': {'kettle': 12,
+                                         'fridge': 60,
+                                         'washing machine': 1800,
+                                         'mircowave': 12,
+                                         'dish washer': 1800},
+                              'min_off': {'kettle': 0,
+                                          'fridge': 12,
+                                          'washing machine': 160,
+                                          'microwave': 30,
+                                          'dish washer': 1800},
+                              'c0': {'kettle': 1,
+                                     'fridge': 0.000001,
+                                     'washing machine': 0.01,
+                                     'microwave': 1,
+                                     'dish washer': 1}
     }
-
 }
 
 NILM22_experiment = {
