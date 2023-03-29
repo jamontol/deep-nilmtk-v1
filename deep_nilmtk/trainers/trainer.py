@@ -11,6 +11,7 @@ from deep_nilmtk.data.pre_process.normalize import normalize
 import numpy as np
 from deep_nilmtk.data.post_process import aggregate_mean
 import mlflow
+import torch
 
 import os
 
@@ -188,11 +189,9 @@ class Trainer:
             chkpt = f'{self.hparams["results_path"]}/{self.hparams["checkpoints_path"]}/{appliance}/{self.hparams["model_name"]}/version_{v}'
             # if CV is used the predictions are averaged over the models trained on different folds
             y_pred = self.predict_model( mains, self.models[appliance], chkpt, appliance) if self.hparams['kfolds']<=1 else \
-                np.array(
-                    [
+                torch.stack([
                         self.predict_model(mains, self.models[appliance][fold], f"{chkpt}/{fold+1}", appliance) for  fold in range(self.hparams['kfolds'])
-                    ]
-                ).mean(axis=0)
+                    ], dim=0).numpy().mean(axis=0)
 
             predictions[appliance] = y_pred
 

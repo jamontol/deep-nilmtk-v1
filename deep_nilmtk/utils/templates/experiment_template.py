@@ -28,6 +28,7 @@ class ExperimentTemplate:
                 'max_nb_epochs': max_epochs
             })
             params.update(self.experiment['app_activation_params'])
+            params.update(self.experiment['experiment_settings'])
             methods.update({
                 baseline: NILMExperiment(params)
             })

@@ -60,7 +60,8 @@ test_experiment = {
                                      'washing machine': 0.01,
                                      'microwave': 1,
                                      'dish washer': 1}
-    }
+    },
+    'experiment_settings': {'kfolds': 2}
 }
 
 NILM22_experiment = {

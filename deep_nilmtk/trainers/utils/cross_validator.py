@@ -33,7 +33,7 @@ class CrossValidator:
         best_losses = []
         for fold_idx, (train_idx, valid_idx) in enumerate(fold.split(dataset.original_inputs)):
             new_model = model.__class__(hparams)
-            fold_ds = trainer_imp.get_dataset(dataset.original_inputs[train_idx[0]:valid_idx[-1], :],
+            fold_ds,_ = trainer_imp.get_dataset(dataset.original_inputs[train_idx[0]:valid_idx[-1], :],
                                             dataset.original_targets[train_idx[0]:valid_idx[-1], :],
                                                 seq_type=hparams['seq_type'],
                                                 target_norm=hparams['target_norm'],
