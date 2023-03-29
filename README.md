@@ -2,8 +2,24 @@
 
 <div align="center">    
  
-# Deep-NILMtk    
+# Deep-NILMtk  
+</div>
 
+<div align="left">  
+
+*This fork (forked 28th March 2023) is an adaption of the original toolkit, modified to suit the requirements of my master's thesis. In particular, the updates include*
+
+- *the implementation of a new model (ELECTRIcity)*  
+- *small changes to the already implemented BERT4NILM and SAED models to get them running*  
+- *changes to parameter and hyperparamter specification procedure*   
+- *small bug fixes to enable cross-val and hyperparameter optimization*  
+- *changes to the general logging levels*  
+- *the exclusion of tensorflow for now, as it was causing conflicts within the environment*   
+
+*Updates are documented below in Italics.*
+
+</div>
+<div align="center"> 
 [![Python](https://img.shields.io/pypi/pyversions/tensorflow.svg?style=plastic)]()
 
 
@@ -13,7 +29,7 @@
  
 
 
- 
+
 </div>
 Deep-NILMtk is an open source package designed specifically 
 for deep models applied to solve NILM. It implements the general NILM 
@@ -39,6 +55,9 @@ a link  to four pre-converted datasets.
 
 ## How to install?
 
+- *Using Python 3.8 and nilmtk=0.4.3*
+- *Additionally, the following packages were required: protobuf, click*
+
 ```bash
 conda create --name deep-nilmtk
 conda activate deep-nilmtk
@@ -51,6 +70,22 @@ git clone https://github.com/BHafsa/deep-nilmtk-v1.git
 cd deep-nilmtk-v1
 pip install .
 ```
+
+## *Usage of Toolkit for Master's Thesis*
+- *experiment templates are designed in a general way to be reused for different models and appliances specified in each run in the main script*
+- *separate experiments for different appliances (because they require different input lengths)*
+- *separate experiments for different models (because they sometimes have different output lengths, e.g. Seq2Point vs. Seq2Seq)*
+
+
+|Specified in Experiment Template (e.g. `ukdale_template.py` or `redd_template.py`)|Specified in main script
+|----------------------------------------------------------------------------------|-
+|dataset              |experiment name
+|train/test period    |results path
+|train/test houses    |appliance
+|metrics              |model
+|appliance specific activation parameters |backend (here only `pytorch`)
+|experiment settings (optional, e.g. `kfolds`, `use_optuna`) |input, output length
+| | training epochs?
 
 ## Template starter project
 
