@@ -5,6 +5,8 @@ from sklearn.model_selection import TimeSeriesSplit
 import mlflow
 import numpy as np
 
+from deep_nilmtk.data.loader.pytorch.bert_dataloader import BERTDataset
+
 class CrossValidator:
     """
     Train models using cross validation
@@ -31,10 +33,16 @@ class CrossValidator:
         models = {}
         fold_idx = 1
         best_losses = []
-        for fold_idx, (train_idx, valid_idx) in enumerate(fold.split(dataset.original_inputs)):
+        if hparams['loader_class'] is BERTDataset:
+            original_inputs = dataset.x
+            original_targets = dataset.y
+        else:
+            original_inputs = dataset.original_inputs
+            original_targets = dataset.original_targets
+        for fold_idx, (train_idx, valid_idx) in enumerate(fold.split(original_inputs)):
             new_model = model.__class__(hparams)
-            fold_ds,_ = trainer_imp.get_dataset(dataset.original_inputs[train_idx[0]:valid_idx[-1], :],
-                                            dataset.original_targets[train_idx[0]:valid_idx[-1], :],
+            fold_ds,_ = trainer_imp.get_dataset(original_inputs[train_idx[0]:valid_idx[-1], :],
+                                            original_targets[train_idx[0]:valid_idx[-1], :],
                                                 seq_type=hparams['seq_type'],
                                                 target_norm=hparams['target_norm'],
                                                 in_size=hparams['in_size'],
