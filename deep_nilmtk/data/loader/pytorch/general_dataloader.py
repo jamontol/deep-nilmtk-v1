@@ -49,7 +49,6 @@ class GeneralDataLoader(torch.utils.data.Dataset):
         self.params = {}
         #pad the sequence with zeros in the beginning and at the end
         logging.info (f"Inputs shape before padding {inputs.shape}, padding at the beginning is set to {pad_at_begin}")
-        print(self.in_size)
         inputs = pad_data(inputs, self.in_size, pad_at_begin)
         logging.info (f"Inputs shape after padding {inputs.shape}")
 
@@ -57,8 +56,6 @@ class GeneralDataLoader(torch.utils.data.Dataset):
             assert quantiles is not None
             self.q=torch.tensor(quantiles)
         self.inputs = torch.tensor(inputs).float()
-
-        print(in_size)
 
         if targets is not None:
             logging.info (f"Targets shape before padding {targets.shape}, the padding at the beginning is set to {pad_at_begin}")

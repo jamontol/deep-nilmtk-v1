@@ -8,7 +8,6 @@ class BERTDataset(torch.utils.data.Dataset):
     def __init__(self, inputs, targets=None, params=None):
 
         self.x = inputs
-        print(params)
         self.threshold =  [params['threshold'][params['appliances'][0]]] if 'threshold' in params else None
         self.min_on =  [params['min_on'][params['appliances'][0]]] if 'min_on' in params else None
         self.min_off =  [params['min_off'][params['appliances'][0]]] if 'min_off' in params else None
