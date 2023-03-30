@@ -29,9 +29,6 @@ def get_exp_parameters():
     parser.add_argument('--clip_value', type=int, default=10)
     parser.add_argument('--learning_rate', default=2e-5, type=float)
     # parser.add_argument('--eps', default=1e-8, type=float)
-    # parser.add_argument('--dropout', default=0.25, type=float)
-    # parser.add_argument('--pool_filter', default=16, type=int)
-    # parser.add_argument('--kernel_size', default=5, type=int)
     parser.add_argument('--patience_optim', default=5, type=int)
     parser.add_argument('--patience_check', default=5, type=int)
     parser.add_argument('--optimizer', type=str, default='adam', choices=['sgd', 'adam', 'adamw'])
@@ -47,7 +44,6 @@ def get_exp_parameters():
     # parser.add_argument('--latent_size', default=64, type=int)
     # parser.add_argument('--num_gauss', default=5, type=int)
     # parser.add_argument('--min_std', default=0.1, type=float)
-    # parser.add_argument('--n_layers', default=4, type=int)
     parser.add_argument('--out_size', default=1, type=int)
     parser.add_argument('--in_size', default=99, type=int)
     parser.add_argument('--border', default=0, type=int)
@@ -69,6 +65,10 @@ def get_exp_parameters():
     parser.add_argument('--point_position', default="last_position", type=str)
     parser.add_argument('--quantiles', default=[0.1, 0.25, 0.5, 0.75, 0.9], type=list)
     # parser.add_argument('--num_layer', default=3, type=int)
+    # parser.add_argument('--n_layers', default=4, type=int)
+    # parser.add_argument('--dropout', default=0.25, type=float)
+    # parser.add_argument('--pool_filter', default=16, type=int)
+    # parser.add_argument('--kernel_size', default=5, type=int)
 
     # Activation Extraction
     parser.add_argument('--threshold_method', default="at", type=str)
@@ -78,7 +78,7 @@ def get_exp_parameters():
     parser.add_argument('--gap', default=0, type=int)
     parser.add_argument('--test_size', default=None, type=int)
     
-    # TODO: look into it
+    # Number of Inputs
     parser.add_argument('--feature_type', default="combined", type=str)
     
     # Not used

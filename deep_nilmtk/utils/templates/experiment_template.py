@@ -11,9 +11,7 @@ class ExperimentTemplate:
                  template_name,
                  list_appliances,
                  list_baselines_backends,
-                 in_sequence,
-                 out_sequence,
-                 max_epochs):
+                 experiment_details):
         self.experiment = templates[template_name]
         self.template_name = template_name
         self.data_path = data_path
@@ -21,13 +19,13 @@ class ExperimentTemplate:
             self.experiment.update({'appliances': list_appliances})
         methods = {}
         for baseline, backend in list_baselines_backends:
+            # get model architecture info
             params = models[backend][baseline]['model'].get_template()
-            params.update({
-                'in_size': in_sequence,
-                'out_size': out_sequence,
-                'max_nb_epochs': max_epochs
-            })
+            # get training info 
+            params.update(experiment_details)
+            # get appliance specific activation info
             params.update(self.experiment['app_activation_params'])
+            # get additional experiment info
             params.update(self.experiment['experiment_settings'])
             methods.update({
                 baseline: NILMExperiment(params)

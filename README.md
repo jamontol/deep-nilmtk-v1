@@ -73,20 +73,24 @@ pip install .
 ```
 
 ## *Usage of Toolkit for Master's Thesis*
-- *experiment templates are designed in a general way to be reused for different models and appliances specified in each run in the main script*
-- *separate experiments for different appliances (because they require different input lengths)*
-- *separate experiments for different models (because they sometimes have different output lengths, e.g. Seq2Point vs. Seq2Seq)*
+- *an experiment is executed for one specific model and one specific appliance on the basis of an* ***experiment template*** *(e.g. `ukdale_template.py` or `redd_template.py`) and a given* ***config file***
+- ***experiment templates*** *are designed in a general way to be reused for different models and appliances, they contain information about:*
+    - *dataset*
+    - *train/test period*
+    - *train/test houses*
+    - *metrics*
+    - *dataset specific activation parameters*
+    - *experiment settings (optional) such as `kfolds` & `use_optuna` + their corresponding parameters; logging and result export specifications*
+- *an experiment can be conducted in different modes (regular training/cross validation/hyperparamer optimisation) specified in the template via the experiment settings*
+- ***config files*** *contain more flexible information that changes for each experiment; hyperparameters and parameters specified in config files have higher priority over instantiations of these values anywhere else in the script; the (hyper)parameters include:*
+    - *experiment name*
+    - *appliance*
+    - *model type*
+    - *training hyperparameters*
+    - *specifics of input & output windows*
+    - *customisation of pre- and post-processing*
 
-
-|Specified in Template (e.g. `ukdale_template.py` or `redd_template.py`)|Specified in main script
-|----------------------------------------------------------------------------------|-
-|dataset              |experiment name
-|train/test period    |results path
-|train/test houses    |appliance
-|metrics              |model
-|appliance specific activation parameters |backend (here only `pytorch`)
-|experiment settings (optional, e.g. `kfolds`, `use_optuna`) |input, output length
-| | training epochs?
+- *although it would be possible to have different models and different appliances within the same experiment, we use separate experiments for different appliances (because they require different input lengths) and separate experiments for different models (because they sometimes have different output lengths, e.g. Seq2Point vs. Seq2Seq)*
 
 ## Template starter project
 
