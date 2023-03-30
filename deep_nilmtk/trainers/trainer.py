@@ -123,7 +123,7 @@ class Trainer:
                                                target_norm=self.hparams['target_norm'],
                                                in_size=self.hparams['in_size'],
                                                out_size=self.hparams['out_size'],
-                                               point_position=self.hparams['point_position'], hparams={**self.hparams, **{'appliances':[appliance_name]}})
+                                               point_position=self.hparams['point_position'], loader=self.loader_class, hparams={**self.hparams, **{'appliances':[appliance_name]}})
             mlflow.set_experiment(appliance_name)
             model, run_id, _ = cv.cross_validate( self.trainer_imp, dataset, self.models[appliance_name], appliance_name, self.hparams)
             self.models[appliance_name] = model
