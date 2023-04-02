@@ -2,7 +2,7 @@ import pandas as pd
 from nilmtk.disaggregate import Disaggregator
 import warnings
 from deep_nilmtk.data.pre_process import preprocess, generate_features
-from deep_nilmtk.data.post_process import postprocess
+from deep_nilmtk.data.post_process import postprocess, bert_postprocess
 from deep_nilmtk.trainers import Trainer, TorchTrainer#, KerasTrainer
 from deep_nilmtk.config import get_exp_parameters
 from deep_nilmtk.utils import check_model_backend
@@ -64,12 +64,16 @@ class NILMExperiment(Disaggregator):
                 else self.hparams['custom_preprocess'](mains, self.hparams, sub_main)
 
             self.main_params = params
+            print("input normalisation before training creates main_params:")
+            print(self.main_params)
 
         # STEP 02: Feature engineering
         mains = generate_features(mains, self.hparams)
         self.trainer.hparams.update(self.hparams)
         # STEP 03: Model Training
         self.models, self.appliance_params = self.trainer.fit(mains, sub_main)
+        print("appliance_params after training:")
+        print(self.appliance_params)
 
     def get_trainer(self):
         """
@@ -98,19 +102,21 @@ class NILMExperiment(Disaggregator):
             # STEP 01: Pre Process
             print(test_mains_df.shape)
             if do_preprocessing:
+                print("doing input normalisation on test data using main_params:")
+                print(self.main_params)
                 test_mains_df, params = self.hparams['custom_preprocess']([test_mains_df], self.hparams) if  self.hparams['custom_preprocess'] \
                     else  preprocess([test_mains_df], norm_type=self.hparams['input_norm'], params=self.main_params)
             else:
                 logging.warning('The data was not normalised, this may influence the performance of your model')
-            print(test_mains_df.shape)
+
             # STEP 02: Generate the predictions
             predictions = self.trainer.predict(test_mains_df)
 
             # STEP 03: Post Process
             predictions = postprocess(predictions, self.hparams['target_norm'], self.appliance_params,\
                                       aggregate= (self.hparams['seq_type'] == 'seq2seq' or self.hparams['seq_type'] == 'seq2subseq'), stride=self.hparams['stride'])\
-                if not self.hparams['custom_postprocess'] else self.hparams[
-                'custom_postprocess'](predictions. self.hparams)
+                if not self.hparams['custom_postprocess'] else eval(self.hparams[
+                'custom_postprocess'])(predictions)
 
             predictions_results.append(pd.DataFrame(predictions))
 

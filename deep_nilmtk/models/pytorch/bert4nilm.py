@@ -287,12 +287,12 @@ class BERT4NILM(nn.Module):
 
         logits = self.forward(seqs).float()
 
-        labels = (labels_energy / self.cutoff.to(seqs.device)).float()  # This the normalization of the output data ?!!!
+        labels = (labels_energy / self.cutoff.to(seqs.device)).float()  # normalization of target data
 
-        logits_energy = self.cutoff_energy(logits * self.cutoff.to(seqs.device)).float()
+        logits_energy = self.cutoff_energy(logits * self.cutoff.to(seqs.device)).float() # denormalization of predictions
         logits_status = self.compute_status(logits_energy).float()
 
-        # Calculating the Loss function
+        # Calculating the Loss function on normalized target data and predictions
         kl_loss = self.kl(torch.log(F.softmax(logits.squeeze() / 0.1, dim=-1) + 1e-9),
                           F.softmax(labels.squeeze() / 0.1, dim=-1))
         # print(f'margin:{kl_loss}')
@@ -348,6 +348,7 @@ class BERT4NILM(nn.Module):
         """
         columns = data.squeeze().shape[-1]
 
+        # if no cutoff is specified
         if self.cutoff.size(0) == 0:
             self.cutoff = torch.tensor(
                 [3100 for i in range(columns)])
@@ -368,6 +369,7 @@ class BERT4NILM(nn.Module):
         data_shape = data.shape
         columns = data.shape[-1]
 
+        # if no threshold is specified
         if self.threshold.size(0) == 0:
             self.threshold = torch.tensor(
                 [10 for i in range(columns)])
@@ -392,6 +394,7 @@ class BERT4NILM(nn.Module):
 
         pred = []
 
+        # energy and status predictions
         e_pred_curve = []
         s_pred_curve = []
 
@@ -406,9 +409,10 @@ class BERT4NILM(nn.Module):
 
                     true.append(seqs)
 
-                    logits_energy = self.cutoff_energy(logits * self.cutoff.to(seqs.device))  # Denormalization
+                    logits_energy = self.cutoff_energy(logits * self.cutoff.to(seqs.device))  # denormalization of predictions
                     logits_status = self.compute_status(logits_energy)
 
+                    # predicted status
                     status = (logits_status > 0) * 1
 
                     s_pred_curve.append(status)
@@ -420,7 +424,6 @@ class BERT4NILM(nn.Module):
 
                 pbar.close()
 
-        # TODO: Denormalisation !!! Previously done ?
         e_pred_curve = torch.cat(e_pred_curve, 0).detach().numpy()
         s_pred_curve = torch.cat(s_pred_curve, 0).detach().numpy()
     

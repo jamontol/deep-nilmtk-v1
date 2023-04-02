@@ -47,9 +47,11 @@ class Trainer:
         """
         submain_norm = submain.copy()
         params = {}
+        
+        # target normalisation (not necessary for BERT4NILM)
         if loader is None:
             # if a custom loader is used this part is left to the developer
-            # since some models require state generation wich can only be done using the
+            # since some models require state generation which can only be done using the
             # target power before normalization
             new_params, submain_norm = normalize(submain.values, target_norm)
 
