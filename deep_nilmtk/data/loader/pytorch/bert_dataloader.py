@@ -12,8 +12,8 @@ class BERTDataset(torch.utils.data.Dataset):
         self.min_on =  [params['min_on'][params['appliances'][0]]] if 'min_on' in params else None
         self.min_off =  [params['min_off'][params['appliances'][0]]] if 'min_off' in params else None
         self.window_size = params['in_size'] if 'in_size' in params else 480
-        self.stride = params['stride'] if 'stride' in params else 1
-        self.mask_prob = params['mask_prob'] if 'mask_prob' in params else .05
+        self.stride = params['stride'] if 'stride' in params else 120
+        self.mask_prob = params['mask_prob'] if 'mask_prob' in params else .25
         self.params={}
         self.y = targets
         if targets is not None:

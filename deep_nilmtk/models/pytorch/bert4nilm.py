@@ -201,7 +201,7 @@ class BERT4NILM(nn.Module):
 
         super().__init__()
 
-        self.original_len = params['in_size'] if 'in_size' in params else 99
+        self.original_len = params['in_size'] if 'in_size' in params else 480
         self.output_size = len(params['appliances']) if params['multi_appliance'] else 1
         self.stride = params['stride'] if 'stride' in params else 1
                 
@@ -223,9 +223,9 @@ class BERT4NILM(nn.Module):
         self.C0 = torch.tensor([params['c0'][params['appliances'][0]] if 'c0' in params else .3])
 
         self.latent_len = int(self.original_len / 2)
-        self.dropout_rate = params['dropout'] if 'dropout' in params else 0.2
+        self.dropout_rate = params['dropout'] if 'dropout' in params else 0.1
 
-        self.hidden = params['hidden'] if 'hidden' in params else 64
+        self.hidden = params['hidden'] if 'hidden' in params else 256
         self.heads = params['heads'] if 'heads' in params else 2
         self.n_layers = params['n_layers'] if 'n_layers' in params else 2
 
