@@ -35,12 +35,37 @@ class BERTDataset(torch.utils.data.Dataset):
         x = self.padding_seqs(self.x[start_index: end_index]).reshape(-1)
 
         if self.y is not None:
-            # Training and validation Phase
+            # ---------- Training and validation Phase
             y = self.padding_seqs(self.y[start_index: end_index])
             status = self.padding_seqs(self.status[start_index: end_index])
+            
+            # input masking
+            tokens = []
+            labels = []
+            on_offs = []
+            for i in range(len(x)):
+                prob = random.random()
+                if prob < self.mask_prob:
+                    prob = random.random()
+                    if prob < 0.8:
+                        tokens.append(-1)
+                    elif prob < 0.9:
+                        tokens.append(np.random.normal())
+                    else:
+                        tokens.append(x[i])
+
+                    labels.append(y[i])
+                    on_offs.append(status[i])
+                else:
+                    tokens.append(x[i])
+                    temp = np.array([-1] * self.columns)
+                    labels.append(temp)
+                    on_offs.append(temp)
+ 
             return torch.tensor(x), torch.tensor(y), torch.tensor(status)
+        
         else:
-            # Testing Phase
+            # ---------- Testing Phase
             tokens = []
             for i in range(len(x)):
                 tokens.append(x[i])
