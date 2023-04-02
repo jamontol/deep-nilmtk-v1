@@ -249,14 +249,30 @@ class BERT4NILM(nn.Module):
             output_padding=0 if self.original_len % 2 == 0 else 1)
         self.linear1 = create_linear(self.hidden, 128)
         self.linear2 = create_linear(128, self.output_size)
+        
+        self.truncated_normal_init()
 
-        self.activation = nn.Sigmoid()
+        #self.activation = nn.Sigmoid()
 
         self.kl = nn.KLDivLoss(reduction='batchmean')
         self.mse = nn.MSELoss()
         self.mae = nn.L1Loss(reduction='mean')
         self.margin = nn.SoftMarginLoss()
         self.l1_on = nn.L1Loss(reduction='sum')
+    
+    def truncated_normal_init(self, mean=0, std=0.02, lower=-0.04, upper=0.04):
+        params = list(self.named_parameters())
+        for n, p in params:
+            if 'layer_norm' in n:
+                continue
+            else:
+                with torch.no_grad():
+                    l = (1. + math.erf(((lower - mean) / std) / math.sqrt(2.))) / 2.
+                    u = (1. + math.erf(((upper - mean) / std) / math.sqrt(2.))) / 2.
+                    p.uniform_(2 * l - 1, 2 * u - 1)
+                    p.erfinv_()
+                    p.mul_(std * math.sqrt(2.))
+                    p.add_(mean)
 
     def forward(self, sequence):
         x_token = self.pool(self.conv(sequence.float().unsqueeze(1))).permute(0, 2, 1)
