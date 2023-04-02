@@ -1,7 +1,8 @@
 from .ukdale_template import *
 
 templates = {
-    'test_experiment': test_experiment,
+    'uk_dale_acts_from_paper': uk_dale_acts_from_paper,
+    'uk_dale_acts_from_repo': uk_dale_acts_from_repo,
     'NILM22_experiment':NILM22_experiment,
     'ukdale_0':ukdale_0,
     'ukdale_1':ukdale_1,

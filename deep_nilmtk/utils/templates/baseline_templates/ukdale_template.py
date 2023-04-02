@@ -1,4 +1,4 @@
-test_experiment = {
+uk_dale_acts_from_paper = {
     'power': {'mains': ['active'], 'appliance': ['active']},
     'sample_rate': 8,
     'appliances': [],
@@ -61,8 +61,75 @@ test_experiment = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
-    'experiment_settings': {'kfolds': 2}
+    'experiment_settings': {'kfolds': 1}
 }
+
+uk_dale_acts_from_repo = {
+    'power': {'mains': ['active'], 'appliance': ['active']},
+    'sample_rate': 8,
+    'appliances': [],
+    'artificial_aggregate': False,
+    'DROP_ALL_NANS': True,
+    'methods': {
+
+    },
+    'train': {
+        'datasets': {
+            'ukdale': {
+                'path': None,
+                'buildings': {
+                    1: {
+                        'start_time': '2015-01-04',
+                        'end_time': '2015-01-06'
+                    }
+                }
+            }
+        }
+    },
+    'test': {
+        'datasets': {
+            'ukdale': {
+                'path': None,
+                'buildings': {
+                    1: {
+                        'start_time': '2015-04-16',
+                        'end_time': '2015-04-17'
+                    },
+                }
+            },
+
+        },
+        'metrics': ['mae', 'nde', 'rmse', 'f1score'],
+    },
+    'app_activation_params': {'threshold': {'kettle': 2000,
+                                            'fridge': 50,
+                                            'washing machine': 20,
+                                            'microwave': 200,
+                                            ' dish washer': 10},
+                              'cutoff': {'kettle': 3100,
+                                        'fridge': 300,
+                                        'washing_machine': 2500,
+                                        'microwave': 3000,
+                                        'dishwasher': 2500},
+                              'min_on': {'kettle': 2,
+                                         'fridge': 10,
+                                         'washing machine': 300,
+                                         'mircowave': 2,
+                                         'dish washer': 300},
+                              'min_off': {'kettle': 0,
+                                          'fridge': 2,
+                                          'washing machine': 26,
+                                          'microwave': 5,
+                                          'dish washer': 300},
+                              'c0': {'kettle': 1,
+                                     'fridge': 1e-6,
+                                     'washing machine': 0.01,
+                                     'microwave': 1,
+                                     'dish washer': 1}
+    },
+    'experiment_settings': {'kfolds': 1}
+}
+
 
 NILM22_experiment = {
     'power': {'mains': ['active'], 'appliance': ['active']},

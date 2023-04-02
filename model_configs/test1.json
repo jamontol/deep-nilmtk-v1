@@ -5,7 +5,6 @@
 
     "max_nb_epochs": 1,
     "batch_size": 64,
-    "clip_value": 10,
     "learning_rate": 2e-5,
     "eps": 1e-8,
     "patience_optim": 5,
