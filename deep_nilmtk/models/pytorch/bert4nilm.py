@@ -283,7 +283,7 @@ class BERT4NILM(nn.Module):
         """
         seqs, labels_energy, status = batch
 
-
+        batch_shape = status.shape
 
         logits = self.forward(seqs).float()
 
@@ -291,16 +291,22 @@ class BERT4NILM(nn.Module):
 
         logits_energy = self.cutoff_energy(logits * self.cutoff.to(seqs.device)).float() # denormalization of predictions
         logits_status = self.compute_status(logits_energy).float()
+        
+        mask = (status >= 0)
+        labels_masked = torch.masked_select(labels, mask).view((-1, batch_shape[-1]))
+        logits_masked = torch.masked_select(logits, mask).view((-1, batch_shape[-1]))
+        status_masked = torch.masked_select(status, mask).view((-1, batch_shape[-1]))
+        logits_status_masked = torch.masked_select(logits_status, mask).view((-1, batch_shape[-1]))
 
-        # Calculating the Loss function on normalized target data and predictions
-        kl_loss = self.kl(torch.log(F.softmax(logits.squeeze() / 0.1, dim=-1) + 1e-9),
-                          F.softmax(labels.squeeze() / 0.1, dim=-1))
+        # Calculating the loss function on normalized targets and predictions but only for masked positions
+        kl_loss = self.kl(torch.log(F.softmax(logits_masked.squeeze() / 0.1, dim=-1) + 1e-9),
+                          F.softmax(labels_masked.squeeze() / 0.1, dim=-1))
         # print(f'margin:{kl_loss}')
-        mse_loss = self.mse(logits.contiguous().view(-1),
-                            labels.contiguous().view(-1))
+        mse_loss = self.mse(logits_masked.contiguous().view(-1),
+                            labels_masked.contiguous().view(-1))
         # print(f'margin:{mse_loss}')
-        margin_loss = self.margin((logits_status * 2 - 1).contiguous().view(-1),
-                                  (status * 2 - 1).contiguous().view(-1))
+        margin_loss = self.margin((logits_status_masked * 2 - 1).contiguous().view(-1),
+                                  (status_masked * 2 - 1).contiguous().view(-1))
         # print(f'margin:{margin_loss}')
         total_loss = kl_loss + mse_loss + margin_loss
         on_mask = (status >= 0) * (((status == 1) + (status != logits_status)) >= 1)
@@ -312,6 +318,7 @@ class BERT4NILM(nn.Module):
                                     labels_on.contiguous().view(-1))
             total_loss += self.C0.to(seqs.device)[0] * loss_l1_on / total_size
 
+        # mean absolute error computed on all predictions
         mae = self.mae(logits.contiguous().view(-1),
                        labels.contiguous().view(-1))
         # print(total_loss)
