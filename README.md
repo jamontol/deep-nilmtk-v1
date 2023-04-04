@@ -89,9 +89,10 @@ pip install .
     - *customisation of pre- and post-processing*
 
 - *although it would be possible to have different models and different appliances within the same experiment, we use separate experiments for different appliances (because they require different input lengths) and separate experiments for different models (because they sometimes have different output lengths, e.g. Seq2Point vs. Seq2Seq)*
+- *to maintain a good overview in mlflow, store experiments from different datasets in different result directories*
 - *to run an experiment:* 
 ```
-python run.py --appliance fridge --model_config bert4nilm.json --experiment_template uk_dale_acts_from_paper
+python run.py --appliance fridge --model_config bert4nilm.json --experiment_template uk_dale_acts_from_paper --results_path new_results
 ```
 
 ## Template starter project
