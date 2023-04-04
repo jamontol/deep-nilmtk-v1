@@ -4,6 +4,7 @@ import warnings
 from deep_nilmtk.data.pre_process import preprocess, generate_features
 from deep_nilmtk.data.post_process import postprocess, bert_postprocess
 from deep_nilmtk.trainers import Trainer, TorchTrainer#, KerasTrainer
+#from deep_nilmtk.models.pytorch.bert4nilm import compute_custom_f1
 from deep_nilmtk.config import get_exp_parameters
 from deep_nilmtk.utils import check_model_backend
 from collections import OrderedDict
@@ -119,5 +120,11 @@ class NILMExperiment(Disaggregator):
                 'custom_postprocess'])(predictions)
 
             predictions_results.append(pd.DataFrame(predictions))
-
+        
+        #if self.hparams['model_type'] == 'BERT4NILM':
+            # TODO: custom f1 computation using specified threshold
+            #custom_f1 = compute_custom_f1(predictions_results)
+            #print("............ f1-score with appliance-specific threshold ..............")
+            #print(custom_f1) 
+        
         return predictions_results
