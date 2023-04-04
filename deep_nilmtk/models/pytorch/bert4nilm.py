@@ -10,6 +10,8 @@ import torch.nn.functional as F
 from tqdm import tqdm
 import sys
 
+import pandas as pd
+
 import deep_nilmtk.data.loader.pytorch as TorchLoader
 from .layers import create_linear, create_conv1, create_deconv1
 
@@ -206,12 +208,12 @@ class BERT4NILM(nn.Module):
         self.stride = params['stride'] if 'stride' in params else 1
                 
         # The original mode was proposed for several appliances
-        self.threshold = [params['threshold'][params['appliances'][0]]] if 'threshold' in params else None
+        self.threshold = [params['threshold']] if 'threshold' in params else None
 
-        self.cutoff = [params['cutoff'][params['appliances'][0]]] if 'cutoff' in params else None
+        self.cutoff = [params['cutoff']] if 'cutoff' in params else None
 
-        self.min_on = [params['min_on'][params['appliances'][0]]] if 'min_on' in params else None
-        self.min_off = [params['min_off'][params['appliances'][0]]] if 'min_off' in params else None
+        self.min_on = [params['min_on']] if 'min_on' in params else None
+        self.min_off = [params['min_off']] if 'min_off' in params else None
 
         # self.C0 = [params['lambda'][params['appliances'][0]]] if 'lambda' in params else [1e-6]
 
@@ -220,7 +222,7 @@ class BERT4NILM(nn.Module):
 
         self.set_hpramas(self.cutoff, self.threshold, self.min_on, self.min_off)
 
-        self.C0 = torch.tensor([params['c0'][params['appliances'][0]] if 'c0' in params else .3])
+        self.C0 = torch.tensor([params['c0'] if 'c0' in params else .3])
 
         self.latent_len = int(self.original_len / 2)
         self.dropout_rate = params['dropout'] if 'dropout' in params else 0.1
@@ -447,8 +449,8 @@ class BERT4NILM(nn.Module):
 
                 pbar.close()
 
-        e_pred_curve = torch.cat(e_pred_curve, 0).detach().numpy()
-        s_pred_curve = torch.cat(s_pred_curve, 0).detach().numpy()
+        e_pred_curve = torch.cat(e_pred_curve, 0).detach()
+        s_pred_curve = torch.cat(s_pred_curve, 0).detach()
     
         results = {
             "pred": e_pred_curve,
@@ -456,7 +458,15 @@ class BERT4NILM(nn.Module):
         }
 
         return results
-
+    
+    """
+    def compute_custom_f1(pred_list):
+        TODO: should compute f1 using the status predictions
+        which have been cutoff by specified appliance thresholds
+        (logits_status)
+    """ 
+        
+        
     @staticmethod
     def get_template():
         return {

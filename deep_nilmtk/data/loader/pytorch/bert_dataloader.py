@@ -8,16 +8,19 @@ class BERTDataset(torch.utils.data.Dataset):
     def __init__(self, inputs, targets=None, params=None):
 
         self.x = inputs
-        self.threshold =  [params['threshold'][params['appliances'][0]]] if 'threshold' in params else None
-        self.min_on =  [params['min_on'][params['appliances'][0]]] if 'min_on' in params else None
-        self.min_off =  [params['min_off'][params['appliances'][0]]] if 'min_off' in params else None
+        self.threshold =  [params['threshold']] if 'threshold' in params else None
+        self.min_on =  [params['min_on']] if 'min_on' in params else None
+        self.min_off =  [params['min_off']] if 'min_off' in params else None
         self.window_size = params['in_size'] if 'in_size' in params else 480
         self.stride = params['stride'] if 'stride' in params else 120
         self.mask_prob = params['mask_prob'] if 'mask_prob' in params else .25
         self.params={}
         self.y = targets
         if targets is not None:
-            self.y = targets.values.reshape(-1, 1) if len(targets.values.shape) == 1 else targets.values
+            if isinstance(targets, np.ndarray):
+                self.y = targets
+            else:
+                self.y = targets.values.reshape(-1, 1) if len(targets.values.shape) == 1 else targets.values
             self.columns = self.y.shape[1]
             self.status = self.compute_status(self.y)
             #print(self.status.sum())

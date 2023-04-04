@@ -187,7 +187,6 @@ class Trainer:
                 v = params[1]['version']
             else:
                 v= self.hparams['version']
-            print(mains.shape)
             chkpt = f'{self.hparams["results_path"]}/{self.hparams["checkpoints_path"]}/{appliance}/{self.hparams["model_name"]}/version_{v}'
             # if CV is used the predictions are averaged over the models trained on different folds
             y_pred = self.predict_model( mains, self.models[appliance], chkpt, appliance) if self.hparams['kfolds']<=1 else \

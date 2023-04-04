@@ -24,7 +24,8 @@ class ExperimentTemplate:
             # get model training info 
             params.update(model_config)
             # get appliance specific activation info
-            params.update(self.experiment['app_activation_params'])
+            for aap in self.experiment['app_activation_params'].keys():
+                params[aap] = self.experiment['app_activation_params'][aap][list_appliances[0]]
             # get additional experiment info
             params.update(self.experiment['experiment_settings'])
             methods.update({
@@ -39,11 +40,11 @@ class ExperimentTemplate:
     def set_data_path(self):
         for data in self.experiment['train']['datasets']:
             self.experiment['train']['datasets'][data].update({
-                'path':self.data_path
+                'path':self.data_path + self.experiment['train']['datasets'][data]['path']
             })
         for data in self.experiment['test']['datasets']:
             self.experiment['test']['datasets'][data].update({
-                'path':self.data_path
+                'path':self.data_path + self.experiment['test']['datasets'][data]['path']
             })
 
     def __print__(self):
