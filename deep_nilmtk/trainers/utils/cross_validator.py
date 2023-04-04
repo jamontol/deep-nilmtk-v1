@@ -4,6 +4,7 @@ import logging
 from sklearn.model_selection import TimeSeriesSplit
 import mlflow
 import numpy as np
+import pandas as pd
 
 from deep_nilmtk.data.loader.pytorch.bert_dataloader import BERTDataset
 
@@ -41,14 +42,17 @@ class CrossValidator:
             original_targets = dataset.original_targets
         for fold_idx, (train_idx, valid_idx) in enumerate(fold.split(original_inputs)):
             new_model = model.__class__(hparams)
+            # extract values according to fold indices from whole dataset (dataloader) and create new dataset (dataloader)
             fold_ds,_ = trainer_imp.get_dataset(original_inputs[train_idx[0]:valid_idx[-1], :],
                                             original_targets[train_idx[0]:valid_idx[-1], :],
                                                 seq_type=hparams['seq_type'],
                                                 target_norm=hparams['target_norm'],
                                                 in_size=hparams['in_size'],
                                                 out_size=hparams['out_size'],
-                                                point_position=hparams['point_position'])
-            with mlflow.start_run():
+                                                point_position=hparams['point_position'],
+                                                loader=hparams['loader_class'],
+                                                hparams=hparams)
+            with mlflow.start_run(run_name=f"{hparams['model_type']}_f{fold_idx}"):
                 # Log parameters of current run
                 mlflow.log_params(hparams)
                 # Model Training
