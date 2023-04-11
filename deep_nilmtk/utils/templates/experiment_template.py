@@ -3,6 +3,7 @@ from deep_nilmtk.disaggregator import NILMExperiment
 from deep_nilmtk.config import __models__ as models
 
 from deep_nilmtk.utils.templates.baseline_templates import templates
+from deep_nilmtk.utils.check_dataset_buildings import buildings_available
 
 
 class ExperimentTemplate:
@@ -12,7 +13,7 @@ class ExperimentTemplate:
                  list_appliances,
                  list_baselines_backends,
                  model_config):
-        self.experiment = templates[template_name]
+        self.experiment = buildings_available(templates[template_name], list_appliances[0])
         self.template_name = template_name
         self.data_path = data_path
         if list_appliances is not None:
