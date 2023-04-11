@@ -19,8 +19,6 @@ def setup(experiment, experiment_name, results_path, mlflow_repo):
     :param mlflow_repo: The path to the Mlflow folder, defaults to '../mlflow'
     :type mlflow_repo: str, optional
     """
-    print(f'run {experiment_name}')
-
     __resultpath__ = results_path
     if not os.path.exists(f'{results_path}'):
         os.path.exists(f'{results_path}')
