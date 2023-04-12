@@ -14,8 +14,10 @@ args = parser.parse_args()
 
 with open(f"model_configs/{args.model_config}","r") as f:
     model_config = json.load(f)
+    model_config['config_name'] = args.model_config
     
 e_template = args.experiment_template
+e_name = f'{e_template}_{args.appliance}_{args.model_config}'
 
 DATA_PATH = "datasets/"
 RESULTS_PATH = args.results_path
@@ -27,6 +29,6 @@ template = ExperimentTemplate(data_path=DATA_PATH,
                               list_baselines_backends=[(model_config["model_type"], "pytorch")],
                               model_config=model_config)
 
-template.run_template(e_template, 
+template.run_template(e_name,
                       f"{RESULTS_PATH}/baselines",
                       f"{RESULTS_PATH}/mlflow/mlruns")
