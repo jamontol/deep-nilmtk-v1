@@ -4,11 +4,11 @@ import logging
 building_info = {
     'redd': {'fridge': [1,2,3,5],
             'washing machine': [1,2,3,4,5],
-            'dishwasher': [1,2,3,4,5],
+            'dish washer': [1,2,3,4,5],
             'microwave': [1,2,3,5]},
     'ukdale':{'fridge': [1,2,4,5],
             'washing machine': [1,2,4,5],
-            'dishwasher': [1,2,5],
+            'dish washer': [1,2,5],
             'microwave': [1,2,5],
             'kettle': [1,2,3,4,5]}
     }
