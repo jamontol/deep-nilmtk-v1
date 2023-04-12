@@ -33,7 +33,7 @@ uk_dale_acts_from_paper = {
             },
 
         },
-        'metrics': ['mae', 'nde', 'rmse', 'f1score'],
+        'metrics': ['mae', 'nde', 'rmse', 'relative_error', 'f1score'],
     },
     'app_activation_params': {'threshold': {'kettle': 2000,
                                             'fridge': 50,
@@ -99,7 +99,7 @@ uk_dale_acts_from_repo = {
             },
 
         },
-        'metrics': ['mae', 'nde', 'rmse', 'f1score'],
+        'metrics': ['mae', 'nde', 'rmse', 'relative_error', 'f1score'],
     },
     'app_activation_params': {'threshold': {'kettle': 2000,
                                             'fridge': 50,
@@ -165,7 +165,7 @@ uk_dale_acts_from_paper_kfold3 = {
             },
 
         },
-        'metrics': ['mae', 'nde', 'rmse', 'f1score'],
+        'metrics': ['mae', 'nde', 'rmse', 'relative_error', 'f1score'],
     },
     'app_activation_params': {'threshold': {'kettle': 2000,
                                             'fridge': 50,

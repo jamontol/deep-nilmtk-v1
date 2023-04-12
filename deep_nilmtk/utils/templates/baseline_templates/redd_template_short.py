@@ -12,21 +12,9 @@ redd_acts_from_paper = {
             'redd': {
                 'path': "redd.h5",
                 'buildings': {
-                    2: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
                     3: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
-                    4: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
-                    5: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
+                        'start_time': '2011-04-18',
+                        'end_time': '2011-04-20'
                     }
                 }
             }
@@ -37,9 +25,9 @@ redd_acts_from_paper = {
             'redd': {
                 'path': "redd.h5",
                 'buildings': {
-                    1: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
+                    3: {
+                        'start_time': '2011-04-25',
+                        'end_time': '2011-04-26'
                     },
                 }
             },
@@ -50,7 +38,7 @@ redd_acts_from_paper = {
     'app_activation_params': {'threshold': {'fridge': 50,
                                             'washing machine': 20,
                                             'microwave': 200,
-                                            'dish washer': 10},
+                                            ' dish washer': 10},
                               'cutoff': {'fridge': 400,
                                           'washing machine': 500,
                                           'microwave': 1800,
@@ -85,23 +73,10 @@ redd_acts_from_repo = {
             'redd': {
                 'path': "redd.h5",
                 'buildings': {
-                    2: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
                     3: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
-                    4: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
-                    5: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
+                        'start_time': '2011-04-18',
+                        'end_time': '2011-04-20'
                     }
-
                 }
             }
         }
@@ -111,9 +86,9 @@ redd_acts_from_repo = {
             'redd': {
                 'path': "redd.h5",
                 'buildings': {
-                    1: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
+                    3: {
+                        'start_time': '2011-04-25',
+                        'end_time': '2011-04-26'
                     },
                 }
             },
@@ -124,11 +99,11 @@ redd_acts_from_repo = {
     'app_activation_params': {'threshold': {'fridge': 50,
                                             'washing machine': 20,
                                             'microwave': 200,
-                                            'dish washer': 10},
+                                            ' dish washer': 10},
                               'cutoff': {'fridge': 300,
-                                        'washing machine': 3500,
+                                        'washing_machine': 3500,
                                         'microwave': 3000,
-                                        'dish washer': 2500},
+                                        'dishwasher': 2500},
                               'min_on': {'fridge': 10,
                                          'washing machine': 300,
                                          'microwave': 2,
@@ -160,23 +135,10 @@ redd_acts_from_paper_kfold3 = {
             'redd': {
                 'path': "redd.h5",
                 'buildings': {
-                    2: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
                     3: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
-                    4: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
-                    },
-                    5: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
+                        'start_time': '2011-04-18',
+                        'end_time': '2011-04-20'
                     }
-
                 }
             }
         }
@@ -186,9 +148,9 @@ redd_acts_from_paper_kfold3 = {
             'redd': {
                 'path': "redd.h5",
                 'buildings': {
-                    1: {
-                        'start_time': '2011-04-16',
-                        'end_time': '2011-06-14'
+                    3: {
+                        'start_time': '2011-04-25',
+                        'end_time': '2011-04-26'
                     },
                 }
             },
@@ -199,11 +161,11 @@ redd_acts_from_paper_kfold3 = {
     'app_activation_params': {'threshold': {'fridge': 50,
                                             'washing machine': 20,
                                             'microwave': 200,
-                                            'dish washer': 10},
+                                            ' dish washer': 10},
                               'cutoff': {'fridge': 300,
-                                        'washing machine': 3500,
+                                        'washing_machine': 3500,
                                         'microwave': 3000,
-                                        'dish washer': 2500},
+                                        'dishwasher': 2500},
                               'min_on': {'fridge': 10,
                                          'washing machine': 300,
                                          'microwave': 2,
