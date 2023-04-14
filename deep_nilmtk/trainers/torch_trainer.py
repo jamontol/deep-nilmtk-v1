@@ -26,25 +26,29 @@ class TorchTrainer(TrainerImplementor):
         :return:  checkpoint_callback, early_stop_callback, logger
         """
         logging.info(f"The checkpoints are logged in {chkpt_path} metric: val_loss , mode: min")
+        callbacks = []
         checkpoint_callback = pl.callbacks.model_checkpoint.ModelCheckpoint(dirpath=chkpt_path,
                                                                             monitor='val_loss',
                                                                             mode="min",
                                                                             save_top_k=1)
-
-        early_stop_callback = pl.callbacks.EarlyStopping(monitor='val_loss',
+        
+        callbacks.append(checkpoint_callback)
+        if patience_check != "None":
+            early_stop_callback = pl.callbacks.EarlyStopping(monitor='val_loss',
                                                          min_delta=1e-4,
                                                          patience=patience_check,
                                                          mode="min")
+            callbacks.append(early_stop_callback)
 
         logger = DictLogger(f'{results_path}/{logs_path}',
                             name=exp_name,
                             version="single_appliance_experiment" + str(version) if version != '' else "single_appliance_experiment")
 
-        return [checkpoint_callback, early_stop_callback], logger
+        return callbacks, logger
 
     def fit(self, model, dataset,
             chkpt_path=None,exp_name=None,results_path=None, logs_path=None,  version=None,
-            batch_size=64, epochs=20, use_optuna=False, learning_rate=1e-6, optimizer='adam', patience_optim=5,
+            batch_size=64, epochs=20, use_optuna=False, learning_rate=1e-6, optimizer='adam', patience_optim=5, patience_check=5,
             train_idx=None, validation_idx=None):
         # Load weights from the last checkpoint if any in the checkpoints path
 
@@ -53,7 +57,7 @@ class TorchTrainer(TrainerImplementor):
 
         pl_model = PlModel(model, optimizer=optimizer, learning_rate=learning_rate, patience_optim=patience_optim)
 
-        callbacks_lst, logger = self.log_init(f'{results_path}/{chkpt_path}',results_path, logs_path, exp_name, version)
+        callbacks_lst, logger = self.log_init(f'{results_path}/{chkpt_path}',results_path, logs_path, exp_name, version, patience_check=patience_check)
         logging.info(f'Training started for {epochs} epochs')
 
         if not os.path.exists(f'{results_path}/{chkpt_path}/'):

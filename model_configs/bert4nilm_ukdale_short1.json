@@ -1,9 +1,9 @@
 {
-    "model_type": "Seq2Pointbaseline",
+    "model_type": "BERT4NILM",
 
-    "max_nb_epochs": 2,
-    "batch_size": 64,
-    "learning_rate": 2e-5,
+    "max_nb_epochs": 20,
+    "batch_size": 128,
+    "learning_rate": 1e-4,
     "eps": 1e-6,
     "patience_optim": "None",
     "patience_check": "None",
@@ -12,12 +12,14 @@
     "decay_step": 100,
     "gamma": 0.1,
 
-    "stride": 1,
-    "in_size": 99,
+    "stride": 240,
+    "in_size": 480,
     "out_size": 1,
     "border": 0,
 
+    "mask_prob": 0.2,
+
     "input_norm": "z-norm",
-    "target_norm": "z-norm"
+    "custom_postprocess": "bert_postprocess"
     
 }

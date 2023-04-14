@@ -37,7 +37,7 @@ class KerasTrainer(TrainerImplementor):
 
     def fit(self, model, dataset,
             chkpt_path=None, exp_name=None, results_path=None, logs_path=None, version=None,
-            batch_size=64, epochs=20, use_optuna=False, learning_rate=1e-4, optimizer='adam', patience_optim=5,
+            batch_size=64, epochs=20, use_optuna=False, learning_rate=1e-4, optimizer='adam', patience_optim=5, patience_check=4,
             train_idx=None, validation_idx=None):
 
         if not os.path.exists(f'{results_path}/{chkpt_path}/'):
@@ -51,11 +51,16 @@ class KerasTrainer(TrainerImplementor):
         train_data, val_data = self.train_test_split(ds_series, train_idx, validation_idx, batch_size)
         mlflow.keras.autolog()
 
-        es = EarlyStopping(monitor='val_loss', min_delta=.01, verbose=1, patience=4)
+        callbacks = []
+        if patience_check != "None":
+            es = EarlyStopping(monitor='val_loss', min_delta=.01, verbose=1, patience=patience_check)
+            callbacks.append(es)
+        
         mc = ModelCheckpoint(f'{results_path}/{chkpt_path}/disaggregator.h5', monitor='val_loss',
                              save_weights_only=True, save_best_only=True, verbose=1)
+        callbacks.append(mc)
         history = model.fit(train_data, validation_data=val_data, validation_freq=1,
-                            batch_size=batch_size, epochs=epochs, callbacks=[es, mc], verbose=1)
+                            batch_size=batch_size, epochs=epochs, callbacks=callbacks, verbose=1)
 
         return model, history.history['val_loss'][-1]
 

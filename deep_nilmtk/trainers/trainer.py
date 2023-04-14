@@ -109,7 +109,8 @@ class Trainer:
                                          epochs=self.hparams['max_nb_epochs'],
                                          optimizer = self.hparams['optimizer'],
                                          learning_rate = self.hparams['learning_rate'],
-                                         patience_optim= self.hparams['patience_optim'])
+                                         patience_optim= self.hparams['patience_optim'],
+                                         patience_check=self.hparams['patience_check'])
 
             self.models[appliance_name] = model
             self.appliance_params[appliance_name] = params

@@ -56,13 +56,16 @@ class PlModel(pl.LightningModule):
         else:
             raise ValueError
 
-        sched = torch.optim.lr_scheduler.ReduceLROnPlateau(optim,
+        if self.patience_optim == "None":
+            return [optim], []
+        else:
+            sched = torch.optim.lr_scheduler.ReduceLROnPlateau(optim,
                                                            patience=self.patience_optim,
                                                            verbose=True, mode="min")
-        scheduler = {'scheduler':sched,
-                     'monitor': 'val_loss',
-                     'interval': 'epoch',
-                     'frequency': 1}
+            scheduler = {'scheduler':sched,
+                        'monitor': 'val_loss',
+                        'interval': 'epoch',
+                        'frequency': 1}
 
-        return [optim], [scheduler]
+            return [optim], [scheduler]
 
