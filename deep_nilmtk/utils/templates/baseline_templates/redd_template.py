@@ -27,7 +27,12 @@ redd_acts_from_paper = {
                     5: {
                         'start_time': '2011-04-16',
                         'end_time': '2011-06-14'
+                    },
+                    6: {
+                        'start_time': '2011-04-16',
+                        'end_time': '2011-06-14'
                     }
+
                 }
             }
         }
@@ -98,6 +103,10 @@ redd_acts_from_repo = {
                         'end_time': '2011-06-14'
                     },
                     5: {
+                        'start_time': '2011-04-16',
+                        'end_time': '2011-06-14'
+                    },
+                    6: {
                         'start_time': '2011-04-16',
                         'end_time': '2011-06-14'
                     }
@@ -173,6 +182,10 @@ redd_acts_from_paper_kfold3 = {
                         'end_time': '2011-06-14'
                     },
                     5: {
+                        'start_time': '2011-04-16',
+                        'end_time': '2011-06-14'
+                    },
+                    6: {
                         'start_time': '2011-04-16',
                         'end_time': '2011-06-14'
                     }
