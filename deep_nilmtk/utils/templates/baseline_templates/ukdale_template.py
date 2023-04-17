@@ -13,8 +13,20 @@ uk_dale_acts_from_paper = {
                 'path': "ukdale.h5",
                 'buildings': {
                     1: {
-                        'start_time': '2015-01-04',
-                        'end_time': '2015-01-06'
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    3: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    4: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    5: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
                     }
                 }
             }
@@ -25,9 +37,9 @@ uk_dale_acts_from_paper = {
             'ukdale': {
                 'path': "ukdale.h5",
                 'buildings': {
-                    1: {
-                        'start_time': '2015-04-16',
-                        'end_time': '2015-04-17'
+                    2: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
                     },
                 }
             },
@@ -79,9 +91,22 @@ uk_dale_acts_from_repo = {
                 'path': "ukdale.h5",
                 'buildings': {
                     1: {
-                        'start_time': '2015-01-04',
-                        'end_time': '2015-01-06'
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    3: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    4: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    5: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
                     }
+
                 }
             }
         }
@@ -91,9 +116,9 @@ uk_dale_acts_from_repo = {
             'ukdale': {
                 'path': "ukdale.h5",
                 'buildings': {
-                    1: {
-                        'start_time': '2015-04-16',
-                        'end_time': '2015-04-17'
+                    2: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
                     },
                 }
             },
@@ -145,8 +170,20 @@ uk_dale_acts_from_paper_kfold3 = {
                 'path': "ukdale.h5",
                 'buildings': {
                     1: {
-                        'start_time': '2015-01-04',
-                        'end_time': '2015-01-06'
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    3: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    4: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
+                    },
+                    5: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
                     }
                 }
             }
@@ -157,9 +194,9 @@ uk_dale_acts_from_paper_kfold3 = {
             'ukdale': {
                 'path': "ukdale.h5",
                 'buildings': {
-                    1: {
-                        'start_time': '2015-04-16',
-                        'end_time': '2015-04-17'
+                    2: {
+                        'start_time': '2012-11-09',
+                        'end_time': '2017-04-26'
                     },
                 }
             },
