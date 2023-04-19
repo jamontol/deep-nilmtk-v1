@@ -19,7 +19,7 @@ with open(f"model_configs/{args.model_config}","r") as f:
     model_config['config_name'] = args.model_config[:-5]
     
 e_template = args.experiment_template
-e_name = f'{e_template}_{args.appliance}_{args.model_config[:-5]}'
+e_name = f'{e_template}_{args.appliance}_c{model_config["version"]}'
 
 DATA_PATH = "datasets/"
 RESULTS_PATH = args.results_path

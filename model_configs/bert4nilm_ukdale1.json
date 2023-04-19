@@ -21,6 +21,7 @@
 
     "input_norm": "z-norm",
     "custom_postprocess": "bert_postprocess",
-    "note": "without lr-scheduler and early-stopping, like original paper"
+    "note": "without lr-scheduler and early-stopping, like original paper",
+    "version": 1
     
 }

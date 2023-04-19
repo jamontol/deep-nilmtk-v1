@@ -34,7 +34,7 @@ class HparamsOptimiser:
         else:
             study.optimize(self.objective_cv, n_trials=self.hparam['n_trials'], callbacks=[self.save_best_model])
 
-        chkp_path = f'{self.hparam["results_path"]}/{self.hparam["checkpoints_path"]}/{appliance_name}/{self.hparam["config_name"]}/{study.user_attrs["trial_ID"]}'
+        chkp_path = f'{self.hparam["results_path"]}/{self.hparam["checkpoints_path"]}/{appliance_name}/{self.hparams["model_name"]}/version_{v}/{study.user_attrs["trial_ID"]}'
 
 
         model = self.trainer_impl.load_model(model, chkp_path) if  self.hparam['kfolds'] <= 1 else {

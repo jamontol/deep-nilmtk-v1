@@ -100,7 +100,7 @@ class Trainer:
                 mlflow.log_params(self.hparams)
                 # Model Training
                 model, _ = self.trainer_imp.fit(self.models[appliance_name], dataset,
-                                         chkpt_path = f'{self.hparams["checkpoints_path"]}/{appliance_name}/{self.hparams["config_name"]}',
+                                         chkpt_path = f'{self.hparams["checkpoints_path"]}/{appliance_name}/{self.hparams["model_name"]}/version_{v}',
                                          exp_name = self.hparams['exp_name'],
                                          results_path= self.hparams['results_path'],
                                          logs_path = self.hparams['logs_path'],

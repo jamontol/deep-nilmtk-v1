@@ -58,7 +58,7 @@ class CrossValidator:
                 # Model Training
                 model_pl, loss = trainer_imp.fit(
                     new_model, fold_ds,
-                    chkpt_path=f'{hparams["checkpoints_path"]}/{appliance_name}/{hparams["config_name"]}/{fold_idx+1}',
+                    chkpt_path=f'{hparams["checkpoints_path"]}/{appliance_name}/{self.hparams["model_name"]}/version_{v}/{fold_idx+1}',
                     exp_name=hparams['exp_name'],
                     results_path=hparams['results_path'],
                     logs_path=hparams['logs_path'],

@@ -20,6 +20,7 @@
     "mask_prob": 0.2,
 
     "input_norm": "z-norm",
-    "custom_postprocess": "bert_postprocess"
+    "custom_postprocess": "bert_postprocess",
+    "version": 0
     
 }

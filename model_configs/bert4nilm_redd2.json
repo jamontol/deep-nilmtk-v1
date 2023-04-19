@@ -21,6 +21,7 @@
 
     "input_norm": "z-norm",
     "custom_postprocess": "bert_postprocess",
-    "note": "without early stopping but with learning rate scheduler"
+    "note": "without early stopping but with learning rate scheduler",
+    "version": 2
     
 }
