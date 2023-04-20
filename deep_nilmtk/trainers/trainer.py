@@ -100,7 +100,7 @@ class Trainer:
                 mlflow.log_params(self.hparams)
                 # Model Training
                 model, _ = self.trainer_imp.fit(self.models[appliance_name], dataset,
-                                         chkpt_path = f'{self.hparams["checkpoints_path"]}/{appliance_name}/{self.hparams["model_name"]}/version_{self.hparams["version"]}',
+                                         chkpt_path = f'{self.hparams["checkpoints_path"]}/{appliance_name}/{self.hparams["template_name"]}/{self.hparams["model_name"]}/version_{self.hparams["version"]}',
                                          exp_name = self.hparams['exp_name'],
                                          results_path= self.hparams['results_path'],
                                          logs_path = self.hparams['logs_path'],
@@ -188,7 +188,7 @@ class Trainer:
                 v = params[1]['version']
             else:
                 v= self.hparams['version']
-            chkpt = f'{self.hparams["results_path"]}/{self.hparams["checkpoints_path"]}/{appliance}/{self.hparams["model_name"]}/version_{v}'
+            chkpt = f'{self.hparams["results_path"]}/{self.hparams["checkpoints_path"]}/{appliance}/{self.hparams["template_name"]}/{self.hparams["model_name"]}/version_{v}'
             # if CV is used the predictions are averaged over the models trained on different folds
             y_pred = self.predict_model( mains, self.models[appliance], chkpt, appliance) if self.hparams['kfolds']<=1 else \
                 torch.stack([

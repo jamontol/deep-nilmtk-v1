@@ -15,6 +15,7 @@ class ExperimentTemplate:
                  model_config):
         self.experiment = buildings_available(templates[template_name], list_appliances[0])
         self.template_name = template_name
+        self.experiment.update({'template_name': self.template_name})
         self.data_path = data_path
         if list_appliances is not None:
             self.experiment.update({'appliances': list_appliances})
