@@ -23,12 +23,10 @@ class BERTDataset(torch.utils.data.Dataset):
                 self.y = targets.values.reshape(-1, 1) if len(targets.values.shape) == 1 else targets.values
             self.columns = self.y.shape[1]
             self.status = self.compute_status(self.y)
-            #print(self.status.sum())
-
-        self.len = int(np.ceil((len(self.x) - self.window_size) / self.stride) + 1)
+            print(f"status amount of ON: {self.status.sum()}/{len(self.y)}")
 
     def __len__(self):
-        return self.len
+        return int(np.ceil((len(self.x) - self.window_size) / self.stride) + 1)
 
     def __getitem__(self, index):
         start_index = index * self.stride
@@ -65,7 +63,7 @@ class BERTDataset(torch.utils.data.Dataset):
                     labels.append(temp)
                     on_offs.append(temp)
  
-            return torch.tensor(x), torch.tensor(y), torch.tensor(status)
+            return torch.tensor(tokens), torch.tensor(labels), torch.tensor(on_offs)
         
         else:
             # ---------- Testing Phase
