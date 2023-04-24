@@ -24,9 +24,11 @@ class BERTDataset(torch.utils.data.Dataset):
             self.columns = self.y.shape[1]
             self.status = self.compute_status(self.y)
             print(f"status amount of ON: {self.status.sum()}/{len(self.y)}")
+        self.len = int(np.ceil((len(self.x) - self.window_size) / self.stride) + 1)
+
 
     def __len__(self):
-        return int(np.ceil((len(self.x) - self.window_size) / self.stride) + 1)
+        return self.len
 
     def __getitem__(self, index):
         start_index = index * self.stride
