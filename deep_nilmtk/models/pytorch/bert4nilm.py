@@ -436,6 +436,7 @@ class BERT4NILM(nn.Module):
 
                     logits_energy = self.cutoff_energy(logits * self.cutoff.to(seqs.device))  # denormalization of predictions
                     logits_status = self.compute_status(logits_energy)
+                    logits_energy = logits_energy * logits_status
 
                     # predicted status
                     status = (logits_status > 0) * 1
