@@ -29,6 +29,7 @@ class ExperimentTemplate:
                 params[aap] = self.experiment['app_activation_params'][aap][list_appliances[0]]
             # get additional experiment info
             params.update(self.experiment['experiment_settings'])
+            params.update({'aggregate_cutoff': self.experiment['aggregate_cutoff']})
             # store template name
             params.update({'template_name': self.template_name})
             methods.update({

@@ -73,6 +73,7 @@ redd_acts_from_paper = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 1}
 }
 
@@ -134,14 +135,14 @@ redd_acts_from_repo = {
                                             'washing machine': 20,
                                             'microwave': 200,
                                             'dish washer': 10},
-                              'cutoff': {'fridge': 300,
+                              'cutoff': {'fridge': 400,
                                         'washing machine': 3500,
-                                        'microwave': 3000,
-                                        'dish washer': 2500},
+                                        'microwave': 1800,
+                                        'dish washer': 1200},
                               'min_on': {'fridge': 10,
                                          'washing machine': 300,
                                          'microwave': 2,
-                                         'dish washer': 10},
+                                         'dish washer': 300},
                               'min_off': {'fridge': 2,
                                           'washing machine': 26,
                                           'microwave': 5,
@@ -152,6 +153,7 @@ redd_acts_from_repo = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 1}
 }
 
@@ -231,5 +233,6 @@ redd_acts_from_paper_kfold3 = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 3}
 }

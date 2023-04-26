@@ -56,6 +56,7 @@ redd_acts_from_paper = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 1}
 }
 
@@ -118,6 +119,7 @@ redd_acts_from_repo = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 1}
 }
 
@@ -180,5 +182,6 @@ redd_acts_from_paper_kfold3 = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 3}
 }

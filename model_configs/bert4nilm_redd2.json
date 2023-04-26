@@ -19,7 +19,10 @@
 
     "mask_prob": 0.2,
 
+    "data": "REDD",
+
     "input_norm": "z-norm",
+    "custom_preprocess": "bert_preprocess",
     "custom_postprocess": "bert_postprocess",
     "note": "without early stopping but with learning rate scheduler",
     "version": 2

@@ -1,7 +1,7 @@
 import pandas as pd
 from nilmtk.disaggregate import Disaggregator
 import warnings
-from deep_nilmtk.data.pre_process import preprocess, generate_features
+from deep_nilmtk.data.pre_process import preprocess, bert_preprocess, generate_features
 from deep_nilmtk.data.post_process import postprocess, bert_postprocess
 from deep_nilmtk.trainers import Trainer, TorchTrainer#, KerasTrainer
 #from deep_nilmtk.models.pytorch.bert4nilm import compute_custom_f1
@@ -62,7 +62,7 @@ class NILMExperiment(Disaggregator):
 
         if do_preprocessing:
             mains, params, sub_main = preprocess(mains,self.hparams['input_norm'], sub_main) if not self.hparams['custom_preprocess'] \
-                else self.hparams['custom_preprocess'](mains, self.hparams, sub_main)
+                else eval(self.hparams['custom_preprocess'])(mains, self.hparams['input_norm'], sub_main, self.hparams)
 
             self.main_params = params
             print("input normalisation before training creates main_params:")
@@ -105,7 +105,7 @@ class NILMExperiment(Disaggregator):
             if do_preprocessing:
                 print("doing input normalisation on test data using main_params:")
                 print(self.main_params)
-                test_mains_df, params = self.hparams['custom_preprocess']([test_mains_df], self.hparams) if  self.hparams['custom_preprocess'] \
+                test_mains_df, params = eval(self.hparams['custom_preprocess'])([test_mains_df], norm_type=self.hparams['input_norm'], params=self.hparams) if  self.hparams['custom_preprocess'] \
                     else  preprocess([test_mains_df], norm_type=self.hparams['input_norm'], params=self.main_params)
             else:
                 logging.warning('The data was not normalised, this may influence the performance of your model')

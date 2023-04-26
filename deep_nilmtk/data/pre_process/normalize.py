@@ -13,8 +13,8 @@ def z_norm(data,  params=None):
     logging.info(f'Data shape is {len(data)}')
     if len(data.shape) == 1:
         data = data.reshape(-1,1)
-    mean = params['mean'] if params is not None else data.mean(axis=0).reshape(-1,data.shape[-1])
-    std = params['std'] if params is not None else data.std(axis=0).reshape(-1,data.shape[-1])
+    mean = params['mean'] if params is not None and 'mean' in params else data.mean(axis=0).reshape(-1,data.shape[-1])
+    std = params['std'] if params is not None and 'std' in params else data.std(axis=0).reshape(-1,data.shape[-1])
     logging.info(f'Nomalizing the power using the mean={mean}, and std={std}')
     return {
         "mean":mean,

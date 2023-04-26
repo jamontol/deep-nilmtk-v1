@@ -52,3 +52,38 @@ def preprocess(mains,  norm_type, submains=None, params=None):
         return mains, params,  pd.DataFrame(submains)
 
     return mains, params
+
+
+def bert_preprocess(mains,  norm_type, submains=None, params=None):
+    """
+    For BERT4NILM, preprocessing not only includes normalisation
+    but also clipping of mains and submains
+    :param mains: the aggregate power
+    :param submains: the power of appliances
+    :return: pd.DataFrame, pd.DataFrame, dict
+    """
+    logging.warning("Data is preprocessed using default pre-preprocessing function")
+    logging.info(f"Number of data Sources is :{len(mains)} ")
+    mains = np.concatenate(mains, axis=0)
+    logging.info(f"Shape of data after concatenation is :{mains.shape} ")
+    
+    # clip mains
+    mains = np.clip(mains, 0, params['aggregate_cutoff'])
+    
+    # normalise mains
+    normalizers, mains = normalize(mains, norm_type, params)
+    if submains is not None:
+        columns = [app_name for app_name, _ in submains]
+        # clip submains
+        all_targets = []
+        for _, targets in submains:
+            clipped_targets = [np.clip(t, 0, params['cutoff']) for t in targets]
+            clipped_targets = pd.concat(clipped_targets)
+            all_targets.append(clipped_targets)
+        submains = pd.concat(all_targets, axis=1)
+        submains.columns = columns
+        logging.info(f'The target data contains the following appliances:{submains.columns} with shape {submains.shape}') 
+        params.update(normalizers)       
+        return mains, params,  pd.DataFrame(submains)
+
+    return mains, normalizers

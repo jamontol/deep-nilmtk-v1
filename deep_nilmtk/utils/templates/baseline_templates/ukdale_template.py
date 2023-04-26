@@ -73,6 +73,7 @@ uk_dale_acts_from_paper = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 1}
 }
 
@@ -139,7 +140,7 @@ uk_dale_acts_from_repo = {
                               'min_on': {'kettle': 2,
                                          'fridge': 10,
                                          'washing machine': 300,
-                                         'mircowave': 2,
+                                         'microwave': 2,
                                          'dish washer': 300},
                               'min_off': {'kettle': 0,
                                           'fridge': 2,
@@ -152,6 +153,7 @@ uk_dale_acts_from_repo = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 1}
 }
 
@@ -230,6 +232,7 @@ uk_dale_acts_from_paper_kfold3 = {
                                      'microwave': 1,
                                      'dish washer': 1}
     },
+    'aggregate_cutoff': 6000,
     'experiment_settings': {'kfolds': 3}
 }
 

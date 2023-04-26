@@ -19,7 +19,10 @@
 
     "mask_prob": 0.2,
 
+    "data": "UKDALE",
+
     "input_norm": "z-norm",
+    "custom_preprocess": "bert_preprocess",
     "custom_postprocess": "bert_postprocess"
     
 }
