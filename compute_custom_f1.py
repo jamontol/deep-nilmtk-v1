@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 import pickle
 import matplotlib.pyplot as plt
+import pandas as pd
 import numpy as np
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 from nilmtk.losses import *
@@ -12,6 +13,7 @@ parser.add_argument('--pred_file', type=str)
 parser.add_argument('--appliance', type=str)
 parser.add_argument('--ds', type=str)
 parser.add_argument('--params_type', type=str)
+parser.add_argument('--plots', default=False, action='store_true')
 args = parser.parse_args()
 
 
@@ -25,6 +27,8 @@ for error_key, error in zip(pred_dict['error_keys'], pred_dict['errors']):
     metrics[error_key] = error.loc[args.appliance].values[0]
 
 gt = pred_dict['gt'][args.appliance].values
+print(gt)
+print(pred_dict['predictions'])
 predictions = list(pred_dict['predictions'].values())[0][args.appliance].values
 timestamps = list(pred_dict['predictions'].values())[0].index
 
@@ -118,6 +122,7 @@ precision_with_custom_status = precision_score(status_gt, status_predictions)
 recall_with_custom_status = recall_score(status_gt, status_predictions)
 
 print('ORIGINAL')
+print(f'MAE: {metrics[test_setting + "_mae"]}')
 print(f'f1: {metrics[test_setting + "_f1score"]}')
 print(f'precision: {precision_naive} (how many detected activations were correct)')
 print(f'recall: {recall_naive} (how many activations were detected')
@@ -127,21 +132,33 @@ print(f'f1: {f1_with_custom_status}')
 print(f'precision: {precision_with_custom_status} (how many detected activations were correct)')
 print(f'recall: {recall_with_custom_status} (how many activations were detected')
 
+print(set(list(status_gt)))
+print(len(timestamps))
+print(len(status_gt))
+print(len(status_predictions))
+print(timestamps)
 
-plt.plot(timestamps, status_gt, label='status_gt')
-plt.plot(timestamps, -1 * status_predictions, label='status_predictions')
-plt.legend()
-plt.show()
+df = pd.DataFrame({'status_gt':status_gt, 'status_predictions':status_predictions}, index=timestamps)
+df['date'] = df.index.date
+print(df)
+print(df[df['date'] == "2011-05-17"])
+print(df['date'].unique())
 
-plt.plot(timestamps, naive_status_gt, label='naive_status_gt')
-plt.plot(timestamps, -1 * naive_status_predictions, label='naive_status_predictions')
-plt.legend()
-plt.show()
+if args.plots:
+    plt.plot(timestamps, status_gt, label='status_gt')
+    plt.plot(timestamps, -1 * status_predictions, label='status_predictions')
+    plt.legend()
+    plt.show()
 
-plt.plot(timestamps, gt, label='gt')
-plt.plot(timestamps, -1 * predictions, label='predictions')
-plt.legend()
-plt.show()
+    plt.plot(timestamps, naive_status_gt, label='naive_status_gt')
+    plt.plot(timestamps, -1 * naive_status_predictions, label='naive_status_predictions')
+    plt.legend()
+    plt.show()
+
+    plt.plot(timestamps, gt, label='gt')
+    plt.plot(timestamps, -1 * predictions, label='predictions')
+    plt.legend()
+    plt.show()
 
 # rest, no needed for now
 """
