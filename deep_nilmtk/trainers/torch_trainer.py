@@ -70,7 +70,7 @@ class TorchTrainer(TrainerImplementor):
                              callbacks=callbacks_lst,
                              gpus=-1 if torch.cuda.is_available() else None,
                              resume_from_checkpoint=best_checkpoint if not use_optuna else None)
-        dataset_train, dataset_validation = self.data_split(dataset , batch_size)
+        dataset_train, dataset_validation = self.data_split(dataset , batch_size, train_idx, validation_idx)
         # Fit the model using the train_loader, val_loader
         trainer.fit(pl_model, dataset_train, dataset_validation)
 
@@ -105,15 +105,26 @@ class TorchTrainer(TrainerImplementor):
         if train_idx is None or val_idx is None:
             train_idx = int(data.len * (1 - 0.15))
             val_idx = data.len - int(data.len * (1 - 0.15))
-        train_data, val_data = torch.utils.data.random_split(data,
+            train_data, val_data = torch.utils.data.random_split(data,
                                       [train_idx, val_idx],
                                       generator=torch.Generator().manual_seed(3407))
-        train_loader = torch.utils.data.DataLoader(train_data,
+
+            train_loader = torch.utils.data.DataLoader(train_data,
                                                    batch_size,
                                                    shuffle=True)
+            
+        else:
+            train_data = torch.utils.data.Subset(data, range(train_idx))
+            val_data = torch.utils.data.Subset(data, range(train_idx, train_idx+val_idx))
+            # no shuffling of train data when using BERT4NILM
+            train_loader = torch.utils.data.DataLoader(train_data,
+                                                   batch_size,
+                                                   shuffle=False)
+        
         val_loader = torch.utils.data.DataLoader(val_data,
                                                  batch_size,
                                                  shuffle=False)
+        
         return train_loader, val_loader
 
     def train_test_split(self, data, train_idx, val_idx, batch_size):
