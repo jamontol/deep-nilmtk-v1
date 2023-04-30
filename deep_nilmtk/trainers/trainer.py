@@ -99,9 +99,6 @@ class Trainer:
                 # Log parameters of current run
                 mlflow.log_params(self.hparams)
                 # Model Training
-                if self.hparams['model_name'] == 'BERT4NILM':
-                    train_idx = int(dataset.len * (1 - 0.15))
-                    validation_idx = dataset.len - int(dataset.len * (1 - 0.15))
                 model, _ = self.trainer_imp.fit(self.models[appliance_name], dataset,
                                          chkpt_path = f'{self.hparams["checkpoints_path"]}/{appliance_name}/{self.hparams["template_name"]}/{self.hparams["model_name"]}/version_{self.hparams["version"]}',
                                          exp_name = self.hparams['exp_name'],
@@ -113,9 +110,7 @@ class Trainer:
                                          optimizer = self.hparams['optimizer'],
                                          learning_rate = self.hparams['learning_rate'],
                                          patience_optim= self.hparams['patience_optim'],
-                                         patience_check=self.hparams['patience_check'],
-                                         train_idx=train_idx,
-                                         validation_idx=validation_idx)
+                                         patience_check=self.hparams['patience_check'])
 
             self.models[appliance_name] = model
             self.appliance_params[appliance_name] = params
