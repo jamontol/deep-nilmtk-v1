@@ -27,12 +27,12 @@ for error_key, error in zip(pred_dict['error_keys'], pred_dict['errors']):
     metrics[error_key] = error.loc[args.appliance].values[0]
 
 gt = pred_dict['gt'][args.appliance].values
-print(gt)
-print(pred_dict['predictions'])
+#print(gt)
+#print(pred_dict['predictions'])
 predictions = list(pred_dict['predictions'].values())[0][args.appliance].values
 timestamps = list(pred_dict['predictions'].values())[0].index
 
-print(f'Size of test set: {len(gt)}')
+#print(f'Size of test set: {len(gt)}')
 
 # re-compute existing metrics for comparsion
 metrics_recomputed = {}
@@ -60,18 +60,19 @@ def get_activation_params(appliance, params_type, ds):
         elif ds == 'uk_dale':
             d = uk_dale_acts_from_repo
     d = d['app_activation_params']
-    return d['threshold'][appliance], d['min_off'][appliance], d['min_on'][appliance]
+    return d['threshold'][appliance], d['min_off'][appliance], d['min_on'][appliance], d['cutoff'][appliance]
     
 def compute_pred_status(pred, appliance, params_type, ds):
     pred = np.array(pred)
-    threshold, _, _ = get_activation_params(appliance, params_type, ds)
+    threshold, _, _, _ = get_activation_params(appliance, params_type, ds)
     status = (pred >= threshold) * 1
     return status
 
 def compute_gt_status(gt, appliance, params_type, ds):
     gt = np.array(gt)
-    threshold, min_off, min_on = get_activation_params(appliance, params_type, ds)
-    initial_status = gt >= threshold
+    threshold, min_off, min_on, cutoff = get_activation_params(appliance, params_type, ds)
+    clipped_gt = np.clip(gt, 0, cutoff)
+    initial_status = clipped_gt >= threshold
     status_diff = np.diff(initial_status)
     events_idx = status_diff.nonzero()
 
@@ -102,7 +103,7 @@ def compute_gt_status(gt, appliance, params_type, ds):
         off_events = off_events[on_duration >= min_on]
         assert len(on_events) == len(off_events)
 
-    status = gt.copy()
+    status = clipped_gt.copy()
     status[:] = 0
     for on, off in zip(on_events, off_events):
         status[on: off] = 1
@@ -132,17 +133,17 @@ print(f'f1: {f1_with_custom_status}')
 print(f'precision: {precision_with_custom_status} (how many detected activations were correct)')
 print(f'recall: {recall_with_custom_status} (how many activations were detected')
 
-print(set(list(status_gt)))
-print(len(timestamps))
-print(len(status_gt))
-print(len(status_predictions))
-print(timestamps)
+#print(set(list(status_gt)))
+#print(len(timestamps))
+#print(len(status_gt))
+#print(len(status_predictions))
+#print(timestamps)
 
 df = pd.DataFrame({'status_gt':status_gt, 'status_predictions':status_predictions}, index=timestamps)
 df['date'] = df.index.date
-print(df)
-print(df[df['date'] == "2011-05-17"])
-print(df['date'].unique())
+#print(df)
+#print(df[df['date'] == "2011-05-17"])
+#print(df['date'].unique())
 
 if args.plots:
     plt.plot(timestamps, status_gt, label='status_gt')
