@@ -134,7 +134,7 @@ uk_dale_acts_from_repo = {
                                             'dish washer': 10},
                               'cutoff': {'kettle': 3100,
                                         'fridge': 300,
-                                        'washing_machine': 2500,
+                                        'washing machine': 2500,
                                         'microwave': 3000,
                                         'dish washer': 2500},
                               'min_on': {'kettle': 2,
