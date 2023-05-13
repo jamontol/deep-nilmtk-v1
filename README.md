@@ -9,7 +9,6 @@
 
 *This fork (forked 28th March 2023) is an adaption of the original toolkit, modified to suit the requirements of my master's thesis. In particular, the updates include*
 
-- *the implementation of a new model (ELECTRIcity)*  
 - *small changes to the already implemented BERT4NILM and SAED models to get them running*  
 - *changes to parameter and hyperparamter specification procedure*   
 - *small bug fixes to enable cross-val and hyperparameter optimization*  
@@ -92,7 +91,7 @@ pip install .
 - *to maintain a good overview in mlflow, store experiments from different datasets in different result directories*
 - *to run an experiment:* 
 ```
-python run.py --appliance fridge --model_config bert4nilm.json --experiment_template uk_dale_acts_from_paper --results_path new_results
+python run.py --appliance fridge --model_config bert4nilm_redd2.json --experiment_template redd_acts_from_repo --results_path results
 ```
 
 ## Template starter project
