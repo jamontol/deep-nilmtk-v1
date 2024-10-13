@@ -68,11 +68,11 @@ class TorchTrainer(TrainerImplementor):
         trainer = pl.Trainer(logger=logger,
                              max_epochs=epochs,
                              callbacks=callbacks_lst,
-                             gpus=-1 if torch.cuda.is_available() else None,
-                             resume_from_checkpoint=best_checkpoint if not use_optuna else None)
+                             accelerator="auto")
+        
         dataset_train, dataset_validation = self.data_split(dataset , batch_size, train_idx, validation_idx)
         # Fit the model using the train_loader, val_loader
-        trainer.fit(pl_model, dataset_train, dataset_validation)
+        trainer.fit(pl_model, dataset_train, dataset_validation, ckpt_path=best_checkpoint if not use_optuna else None)
 
         val_losses = [metric['val_loss'] for metric in logger.metrics if len(logger.metrics)>1 and 'val_loss' in metric]
 

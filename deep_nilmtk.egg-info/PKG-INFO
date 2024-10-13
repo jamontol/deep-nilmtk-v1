@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: deep_nilmtk
+Version: 0.1.1
+Summary: deep_nilmtk
+Requires-Dist: mlflow
+Requires-Dist: optuna
+Requires-Dist: lightning
+Requires-Dist: torchinfo
