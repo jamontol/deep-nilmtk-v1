@@ -10,7 +10,13 @@ building_info = {
             'washing machine': [1,2,4,5],
             'dish washer': [1,2,5],
             'microwave': [1,2,5],
-            'kettle': [1,2,3,4,5]}
+            'kettle': [1,2,3,4,5]},
+    'hipe': {('motor',1) : [1],
+             ('motor',2) : [1],
+             ('motor',3) : [1],
+            'oven': [1],
+            'printer': [1],
+            'washing machine': [1]}
     }
 
 

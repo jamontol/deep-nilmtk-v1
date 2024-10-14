@@ -84,7 +84,12 @@ class Trainer:
             # normal training of the model
             # select experiment if it does not exist create it
             # an experiment is created for each appliance
-            mlflow.set_experiment(appliance_name)
+            if isinstance(appliance_name, tuple):
+                appliance_instance_name=appliance_name[0]+'_'+str(appliance_name[1])
+            else:
+                appliance_instance_name = appliance_name
+                
+            mlflow.set_experiment(appliance_instance_name)
 
             power = submains[appliance_name]
             dataset, params = self.get_dataset(mains, power, seq_type=  self.hparams['seq_type'],
@@ -181,7 +186,13 @@ class Trainer:
         predictions={}
 
         for appliance in self.models:
-            mlflow.set_experiment(appliance)
+
+            if isinstance(appliance, tuple):
+                appliance_instance = appliance[0]+'_' + str(appliance[1])
+            else:
+                appliance_instance = appliance
+
+            mlflow.set_experiment(appliance_instance)
 
             if self.hparams['use_optuna']:
                 m, params, _= dict(mlflow.get_run(self.run_id[appliance]))['data']

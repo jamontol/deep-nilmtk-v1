@@ -126,7 +126,13 @@ def log_results(experiment, api_res, multi_appliance= True):
     }
 
     for appliance in results:
-        mlflow.set_experiment(appliance)
+        
+        if isinstance(appliance, tuple):
+                appliance_instance = appliance[0]+'_'+str(appliance[1])
+        else:
+            appliance_instance = appliance
+        
+        mlflow.set_experiment(appliance_instance)
         for disaggregator_name, disaggregator in experiment['methods'].items():
             with mlflow.start_run(disaggregator.trainer.run_id[appliance]):
                 mlflow.log_metrics(results[appliance][disaggregator_name])
