@@ -14,7 +14,11 @@ building_info = {
     'hipe': {('motor',1) : [1],
              ('motor',2) : [1],
              ('motor',3) : [1],
-            'oven': [1],
+             ('motor',4) : [1],
+             ('motor',5) : [1],
+             ('oven', 1): [1],
+             ('oven', 2): [1],
+             ('oven', 3): [1],
             'printer': [1],
             'washing machine': [1]}
     }

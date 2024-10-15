@@ -42,6 +42,11 @@ class ExperimentTemplate:
 
 
     def set_data_path(self):
+    
+        dataset_name = self.experiment['train']['datasets'][list(self.experiment['train']['datasets'].keys())[0]]['path']
+
+        self.experiment['data'] = dataset_name
+
         for data in self.experiment['train']['datasets']:
             self.experiment['train']['datasets'][data].update({
                 'path':self.data_path + self.experiment['train']['datasets'][data]['path']
@@ -50,6 +55,7 @@ class ExperimentTemplate:
             self.experiment['test']['datasets'][data].update({
                 'path':self.data_path + self.experiment['test']['datasets'][data]['path']
             })
+    
 
     def __print__(self):
         print(f""""

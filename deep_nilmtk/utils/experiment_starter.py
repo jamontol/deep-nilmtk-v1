@@ -31,6 +31,9 @@ def setup(experiment, experiment_name, results_path, mlflow_repo):
         experiment['methods'][method].hparams.update({
             'exp_name':experiment_name
         })
+        experiment['methods'][method].hparams.update({
+            'data':experiment['data']
+        })
     api_res = API(experiment)
     time_exec = round((time() - start) / 60, 1)
     print('Experiment took: {} minutes'.format(time_exec))
