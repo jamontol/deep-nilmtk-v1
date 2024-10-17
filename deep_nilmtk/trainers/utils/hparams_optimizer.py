@@ -64,7 +64,13 @@ class HparamsOptimiser:
                                                 point_position=self.hparam['point_position'])
         model = self.model.__class__(self.hparam)
         # train the new model
-        mlflow.set_experiment(self.appliance_name)
+        
+        if isinstance(self.appliance_name, tuple):
+            appliance_name_exp = self.appliance_name[0]+'_'+str(self.appliance_name[1])
+        else:
+            appliance_name_exp = self.appliance_name
+
+        mlflow.set_experiment(appliance_name_exp)
         with mlflow.start_run(run_name=self.hparam['model_name']):
             # Auto log all MLflow from lightening
             # Save the run ID to use in testing phase
@@ -76,7 +82,7 @@ class HparamsOptimiser:
             mlflow.log_params(self.hparam)
             model, loss = self.trainer_impl.fit(
                 model, dataset,
-                chkpt_path=f'{self.hparam["checkpoints_path"]}/{self.appliance_name}/{self.hparam["model_name"]}/version_{self.hparam["version"]}',
+                chkpt_path=f'{self.hparam["checkpoints_path"]}/{self.appliance_name}/{self.hparam["template_name"]}/{self.hparam["model_name"]}/version_{self.hparam["version"]}',
                 exp_name=self.hparam['exp_name'],
                 results_path=self.hparam['results_path'],
                 logs_path=self.hparam['logs_path'],
@@ -122,7 +128,12 @@ class HparamsOptimiser:
         cv = CrossValidator(kfolds=self.hparam['kfolds'],
                             test_size=self.hparam['test_size'], gap=self.hparam['gap'])
 
-        mlflow.set_experiment(self.appliance_name)
+        if isinstance(self.appliance_name, tuple):
+            appliance_name_exp = self.appliance_name[0]+'_'+str(self.appliance_name[1])
+        else:
+            appliance_name_exp = self.appliance_name
+
+        mlflow.set_experiment(appliance_name_exp)
         version = self.hparam['version']
         self.hparam['version'] = f'{version}/{trial.number}'
         model, run_id, loss = cv.cross_validate(self.trainer_impl,

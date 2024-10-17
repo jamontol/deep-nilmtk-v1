@@ -105,6 +105,11 @@ class TorchTrainer(TrainerImplementor):
         if train_idx is None or val_idx is None:
             train_idx = int(data.len * (1 - 0.15))
             val_idx = data.len - int(data.len * (1 - 0.15))
+        else:
+            if isinstance(train_idx,np.ndarray):
+                train_idx = train_idx.shape[0]
+                val_idx = val_idx.shape[0]
+            
         
         train_data, val_data = torch.utils.data.random_split(data,
                                       [train_idx, val_idx],

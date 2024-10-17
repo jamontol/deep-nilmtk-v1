@@ -148,7 +148,12 @@ class Trainer:
                                                out_size=self.hparams['out_size'],
                                                point_position=self.hparams['point_position'], hparams={**self.hparams, **{'appliances':[appliance_name]}})
 
-            mlflow.set_experiment(appliance_name)
+            if isinstance(appliance_name, tuple):
+                appliance_name_exp = appliance_name[0]+'_'+str(appliance_name[1])
+            else:
+                appliance_name_exp = appliance_name
+
+            mlflow.set_experiment(appliance_name_exp)
 
             model, run_id = opt.optimise(self.models[appliance_name],dataset, appliance_name)
             self.models[appliance_name] = model

@@ -38,8 +38,8 @@ class CrossValidator:
             original_inputs = dataset.x
             original_targets = dataset.y
         else:
-            original_inputs = dataset.original_inputs
-            original_targets = dataset.original_targets
+            original_inputs = dataset[0].original_inputs # tuple
+            original_targets = dataset[0].original_targets # tuple
         for fold_idx, (train_idx, valid_idx) in enumerate(fold.split(original_inputs)):
             new_model = model.__class__(hparams)
             # extract values according to fold indices from whole dataset (dataloader) and create new dataset (dataloader)
@@ -52,13 +52,14 @@ class CrossValidator:
                                                 point_position=hparams['point_position'],
                                                 loader=hparams['loader_class'],
                                                 hparams=hparams)
-            with mlflow.start_run(run_name=f"{hparams['model_type']}_f{fold_idx}"):
+            #with mlflow.start_run(run_name=f"{hparams['model_type']}_f{fold_idx}"):
+            with mlflow.start_run(run_name=f"{hparams['model_name']}_f{fold_idx}"):
                 # Log parameters of current run
                 mlflow.log_params(hparams)
                 # Model Training
                 model_pl, loss = trainer_imp.fit(
                     new_model, fold_ds,
-                    chkpt_path=f'{hparams["checkpoints_path"]}/{appliance_name}/{self.hparams["template_name"]}/{self.hparams["model_name"]}/version_{self.hparams["version"]}/{fold_idx+1}',
+                    chkpt_path=f'{hparams["checkpoints_path"]}/{appliance_name}/{hparams["template_name"]}/{hparams["model_name"]}/version_{hparams["version"]}/{fold_idx+1}',
                     exp_name=hparams['exp_name'],
                     results_path=hparams['results_path'],
                     logs_path=hparams['logs_path'],
