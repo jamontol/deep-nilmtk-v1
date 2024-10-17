@@ -36,44 +36,54 @@ hipe_aggregated_15min = {
         'metrics': ['mae', 'nde', 'rmse', 'relative_error', 'f1score'],
     },
     'app_activation_params': {'threshold': {('motor',1): 50,
-                                            ('motor',2): 120,
-                                            ('motor',3): 50,
-                                            ('motor',4): 600,
-                                            ('motor',5): 600,
+                                            ('motor',2): 50,
+                                            ('motor',3): 10,
+                                            ('motor',4): 50,
+                                            ('motor',5): 10,
                                             ('oven', 1): 10,
                                             ('oven', 2): 100,
-                                            ('oven', 3): 20,
-                                            'printer': 0,
-                                            'washing machine': 0},
-                              'cutoff': {('motor',1): 25000,
-                                         ('motor',2): 310,
-                                         ('motor',3): 25000,
-                                         ('motor',4): 1050,
+                                            ('oven', 3): 10,
+                                            'printer': 10,
+                                            'washing machine': 100},
+                              'cutoff': {('motor',1): 25500,
+                                         ('motor',2): 650,
+                                         ('motor',3): 350,
+                                         ('motor',4): 1000,
                                          ('motor',5): 900,
+                                         
                                          ('oven', 1): 8000,
-                                         ('oven', 2): 8000,
+                                         ('oven', 2): 6000,
                                          ('oven', 3): 900,
+                                         
                                          'printer': 350,
+
                                          'washing machine': 6000},
-                              'min_on': {('motor',1): 3600,
-                                         ('motor',2): 7200,
-                                         ('motor',3): 7200,
-                                         ('motor',4): 72000,
-                                         ('motor',5): 72000,
+                              'min_on': {('motor',1): 1800,
+                                         ('motor',2): 1800,
+                                         ('motor',3): 3600,
+                                         ('motor',4): 3600,
+                                         ('motor',5): 3600,
+
                                           ('oven', 1): 3600,
                                           ('oven', 2): 3600,
                                           ('oven', 3): 1800,
-                                          'printer': 18000,
+
+                                          'printer': 1800,
+                                          
                                           'washing machine': 900},
                               'min_off': {('motor',1): 900,
                                           ('motor',2): 900,
                                           ('motor',3): 900,
+
                                           ('motor',4): 900,
                                           ('motor',5): 900,
+
                                           ('oven', 1): 900,
                                           ('oven', 2): 900,
                                           ('oven', 3): 900,
+                                          
                                           'printer': 900,
+                                          
                                           'washing machine': 900},
                               'c0': {('motor',1): 1,
                                      ('motor',2): 1,
@@ -86,6 +96,6 @@ hipe_aggregated_15min = {
                                      'printer': 1,
                                      'washing machine': 1}
     },
-    'aggregate_cutoff': 50000,
-    'experiment_settings': {'kfolds': 1, 'use_optuna': False}
+    'aggregate_cutoff': 45000,
+    'experiment_settings': {'kfolds': 1, 'use_optuna': True}
 }
