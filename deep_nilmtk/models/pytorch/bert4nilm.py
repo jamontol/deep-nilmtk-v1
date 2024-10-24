@@ -13,6 +13,9 @@ import sys
 import pandas as pd
 
 import deep_nilmtk.data.loader.pytorch as TorchLoader
+from deep_nilmtk.data.pre_process import bert_preprocess
+from deep_nilmtk.data.post_process import bert_postprocess
+
 from .layers import create_linear, create_conv1, create_deconv1
 
 from torch.nn import TransformerEncoderLayer
@@ -204,7 +207,7 @@ class BERT4NILM(nn.Module):
         super().__init__()
 
         self.original_len = params['in_size'] if 'in_size' in params else 480
-        self.output_size = len(params['appliances']) if params['multi_appliance'] else 1
+        self.output_size = len(params['appliances']) if 'appliances' in params else 1
         self.stride = params['stride'] if 'stride' in params else 1
                 
         # The original mode was proposed for several appliances
@@ -480,7 +483,10 @@ class BERT4NILM(nn.Module):
             'target_norm': 'z-norm',
             'seq_type': 'seq2point',
             'learning_rate': 10e-5,
-            'point_position': 'mid_position'
+            'point_position': 'mid_position',
+            'custom_preprocess': 'bert_preprocess',
+            'custom_postprocess': 'bert_postprocess'
+
             
         }
 

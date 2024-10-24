@@ -49,8 +49,10 @@ class S2S(nn.Module):
 
         """
         super(S2S, self).__init__()
+
         self.original_len = params['in_size']  if 'in_size' in params else 99
-        self.original_len += params['out_size']  if 'out_size' in params else 0
+        self.original_len += params['out_size'] # if 'out_size' in params else 0
+        #self.original_len += params['out_size']  if 'out_size' in params else 0
         self.target_norm = params['target_norm'] if 'target_norm' in params else 'z-norm'
         self.mean = params['mean'] if 'mean' in params else 0
         self.std = params['std'] if 'std' in params else 1
@@ -119,7 +121,36 @@ class S2S(nn.Module):
 
         return results
 
+    @staticmethod
+    def suggest_hparams( trial):
+        """
+        Function returning list of params that will be suggested from optuna
 
+        :param trial: Optuna Trial.
+        :type trial: optuna.trial
+        :return: Parameters with values suggested by optuna
+        :rtype: dict
+        """
+
+        in_size = trial.suggest_int('in_size', low=51, high=560)
+        #window_length += 1 if window_length % 2 == 0 else 0
+        learning_rate = trial.suggest_float('learning_rate', low=1e-6, high=1e-3)
+        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=2)
+        #latent_size = trial.suggest_int('latent_size', low=512, high=2028, step=512)
+        #feature_type = trial.suggest_categorical('feature_type', ['mains', 'combined'])
+        input_norm = trial.suggest_categorical('input_norm', ['z-norm', 'minmax', 'lognorm'])
+        target_norm = trial.suggest_categorical('target_norm', ['z-norm', 'minmax', 'lognorm'])
+
+        return {
+            'in_size': in_size,
+            'out_size': in_size,
+            #'latent_size':latent_size,
+            'learning_rate': learning_rate,
+            'batch_size': batch_size,
+            #'feature_type': feature_type,
+            'input_norm': input_norm,
+            'target_norm': target_norm
+        }
 
 
     @staticmethod
@@ -162,7 +193,7 @@ class Seq2Seq(S2S):
 
         super(Seq2Seq, self).__init__(params)
 
-        in_size=4 if params['feature_type']=="combined" else 1
+        in_size=4 if params['feature_type']=="combined" else 1 #4 if params['feature_type']=="combined" else 1
         output_size = len(params['appliances']) if 'appliances' in params else 1
 
         pool_filter= params['pool_filter'] if 'pool_filter' in params else 8

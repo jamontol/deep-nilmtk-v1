@@ -92,7 +92,7 @@ class Trainer:
             mlflow.set_experiment(appliance_instance_name)
 
             power = submains[appliance_name]
-            dataset, params = self.get_dataset(mains, power, seq_type=  self.hparams['seq_type'],
+            dataset, params = self.get_dataset(mains, power, seq_type=self.hparams['seq_type'],
                                                target_norm=self.hparams['target_norm'],
                                                    in_size=self.hparams['in_size'],
                                                    out_size=self.hparams['out_size'],
@@ -169,7 +169,7 @@ class Trainer:
     def predict_model(self, mains, model, chkpt, app):
         # load the model from the checkpoint
 
-        model = self.trainer_imp.load_model(model, chkpt)
+        model = self.trainer_imp.load_model(model, chkpt, prediction=True)
         data, _ = self.trainer_imp.get_dataset(mains, seq_type=self.hparams['seq_type'],
                                             target_norm=self.hparams['target_norm'],
                                             in_size=self.hparams['in_size'],

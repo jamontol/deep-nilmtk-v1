@@ -13,6 +13,7 @@ def get_exp_parameters():
     parser = ArgumentParser(add_help=False)
 
     # Hyperparam Optimization
+    parser.add_argument('--backend', type=str, default='pytorch')
     parser.add_argument('--use_optuna', type=bool, default=False)
     parser.add_argument('--n_trials', type=int, default=3)
     
@@ -32,7 +33,7 @@ def get_exp_parameters():
     parser.add_argument('--patience_optim', default=5, type=int)
     parser.add_argument('--patience_check', default=5, type=int)
     parser.add_argument('--optimizer', type=str, default='adam', choices=['sgd', 'adam', 'adamw'])
-    parser.add_argument('--weight_decay', type=float, default=0.)
+    parser.add_argument('--weight_decay', type=float, default=0.0)
     parser.add_argument('--momentum', type=float, default=None)
     parser.add_argument('--decay_step', type=int, default=100)
     parser.add_argument('--gamma', type=float, default=0.1)
@@ -92,7 +93,7 @@ def get_exp_parameters():
     parser.add_argument('--z_dim', default=10, type=int)
     parser.add_argument('--hidden_dim', default=128, type=int)
     parser.add_argument('--mdn_dist_type', default="normal", type=str)
-    parser.add_argument('--data', default="UKDALE", type=str)
+    parser.add_argument('--data', default="HIPE", type=str)
     parser.add_argument('--figure_path', default="figures", type=str)
     parser.add_argument('--num_workers', default=0, type=int)
     

@@ -97,5 +97,5 @@ hipe_aggregated_15min = {
                                      'washing machine': 1}
     },
     'aggregate_cutoff': 45000,
-    'experiment_settings': {'kfolds': 1, 'use_optuna': True}
+    'experiment_settings': {'kfolds': 1, 'use_optuna': False}
 }

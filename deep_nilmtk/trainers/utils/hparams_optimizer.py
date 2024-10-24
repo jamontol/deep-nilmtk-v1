@@ -29,19 +29,25 @@ class HparamsOptimiser:
         # Use Optuna fot parameter optimisation of the model
         study = optuna.create_study(study_name=self.hparam['exp_name'], direction="minimize")
         if self.hparam['kfolds'] <= 1:
+            # TODO: USE different pruner (defalt is MedianPruner)
             study.optimize(self.objective, n_trials=self.hparam['n_trials'], callbacks=[self.save_best_model])
             # Load weights of the model
         else:
             study.optimize(self.objective_cv, n_trials=self.hparam['n_trials'], callbacks=[self.save_best_model])
 
+        best_trial = study.best_trial
+        print(f"BEST TRIAL: {best_trial}")
+        print(f"TRIAL_ID: {study.user_attrs['trial_ID']}")
+
         chkp_path = f'{self.hparam["results_path"]}/{self.hparam["checkpoints_path"]}/{appliance_name}/{self.hparam["template_name"]}/{self.hparam["model_name"]}/version_{self.hparam["version"]}/{study.user_attrs["trial_ID"]}'
 
+        print(f"CHECK_PATH 1: {chkp_path}")
 
-        model = self.trainer_impl.load_model(model, chkp_path) if  self.hparam['kfolds'] <= 1 else {
+        pl_model = self.trainer_impl.load_model(model, chkp_path) if  self.hparam['kfolds'] <= 1 else {
             fold: self.trainer_impl.load_model(model, f'{chkp_path}/{fold+1}') for fold in range(self.hparam['kfolds'])
         }
 
-        return model, study.user_attrs["best_run_id"]
+        return pl_model, study.user_attrs["best_run_id"]
 
     def save_best_model(self, study, trial):
         """Keeps track of the trial giving best results
@@ -52,9 +58,10 @@ class HparamsOptimiser:
         if study.best_trial.number == trial.number:
             study.set_user_attr(key="trial_ID", value=trial.number)
             study.set_user_attr(key="best_run_id", value=trial.user_attrs["best_run_id"])
+            
 
     def objective(self, trial):
-        suggested_params = self.suggest_params(trial)
+        suggested_params = self.suggest_params(trial) #load hpo hparams from model
         # TODO: USE the hyper-params
         dataset, _ = self.trainer_impl.get_dataset(self.dataset.original_inputs, self.dataset.original_targets,
                                                 seq_type=self.hparam['seq_type'],
@@ -80,7 +87,7 @@ class HparamsOptimiser:
             self.hparam['version'] = f'{version}/{trial.number}'
 
             mlflow.log_params(self.hparam)
-            model, loss = self.trainer_impl.fit(
+            pl_model, loss = self.trainer_impl.fit(
                 model, dataset,
                 chkpt_path=f'{self.hparam["checkpoints_path"]}/{self.appliance_name}/{self.hparam["template_name"]}/{self.hparam["model_name"]}/version_{self.hparam["version"]}',
                 exp_name=self.hparam['exp_name'],
@@ -96,7 +103,7 @@ class HparamsOptimiser:
             # saving the trained model
             trial.set_user_attr(key='best_run_id', value=mlflow.active_run().info.run_id)
             trial.set_user_attr(key="trial_ID", value=trial.number)
-
+            
         return loss
 
     def suggest_params(self, trial):

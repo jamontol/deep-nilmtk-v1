@@ -39,38 +39,42 @@ __models__ = {
             'RNNbaseline': {
                 'model': TorchModels.seq2point.RNN,
                 'loader': TorchLoader.GeneralDataLoader,
-                'extra_params':{}
+                'extra_params':{'sequence_type': 'seq2point'}
             },
 
             'WindowGRUbaseline': {
                 'model': TorchModels.seq2point.WindowGRU,
                 'loader': TorchLoader.GeneralDataLoader,
-                'extra_params':{}
+                'extra_params':{'sequence_type': 'seq2point'}
             },
 
             'Seq2Seqbaseline':{
                 'model': TorchModels.seq2seq.Seq2Seq,
                 'loader': TorchLoader.GeneralDataLoader,
-                'extra_params':{}
+                'extra_params':{'sequence_type': 'seq2seq'}
             },
 
             'BERT4NILM': {
                 'model': TorchModels.BERT4NILM,
                 'loader': TorchLoader.BERTDataset,
-                'extra_params': {
-
-                }
+                'extra_params': {'sequence_type': 'seq2point'}
             },
 
             'DAE':{
                 'model': TorchModels.seq2seq.DAE,
                 'loader': TorchLoader.GeneralDataLoader,
-                'extra_params':{}
+                'extra_params':{
+                    'sequence_type': 'seq2point'}
             },
-            'unet': {
+            'UNET': {
                 'model': TorchModels.UNETNILM,
                  'loader': TorchLoader.GeneralDataLoader,
-                'extra_params': {}
+                'extra_params': {'sequence_type': 'seq2seq'}
             },
+            'UNET_quantile': {
+                'model': TorchModels.UNETNILM,
+                 'loader': TorchLoader.GeneralDataLoader,
+                'extra_params': {'sequence_type': 'seq2quantile'}
+            }
     }
 }

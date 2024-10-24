@@ -26,6 +26,7 @@ class NILMExperiment(Disaggregator):
     """
 
     def __init__(self, params):
+        
         self.models = None
         super().__init__()
 

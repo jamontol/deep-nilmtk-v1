@@ -5,7 +5,7 @@ from deep_nilmtk.config import __models__ as models
 from deep_nilmtk.utils.templates.baseline_templates import templates
 from deep_nilmtk.utils.check_dataset_buildings import buildings_available
 
-
+SEQ2SEQ=[]
 class ExperimentTemplate:
     def __init__(self,
                  data_path,
@@ -23,6 +23,8 @@ class ExperimentTemplate:
             # get model architecture info
             params = models[backend][baseline]['model'].get_template()
             # get model training info 
+            if models['pytorch'][baseline]['extra_params']['sequence_type'] in ['seq2seq', 'seq2quantile']:
+                model_config['out_size'] = model_config['in_size']
             params.update(model_config)
             # get appliance specific activation info
             for aap in self.experiment['app_activation_params'].keys():

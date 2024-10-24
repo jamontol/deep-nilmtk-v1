@@ -153,6 +153,52 @@ class UNETNILM(nn.Module):
             results = {"pred": pred}
         return results
 
+    @staticmethod
+    def suggest_hparams( trial):
+        """
+        Function returning list of params that will be suggested from optuna
+
+        :param trial: Optuna Trial.
+        :type trial: optuna.trial
+        :return: Parameters with values suggested by optuna
+        :rtype: dict
+        """
+
+        in_size = trial.suggest_int('in_size', low=51, high=560)
+        #window_length += 1 if window_length % 2 == 0 else 0
+        learning_rate = trial.suggest_float('learning_rate', low=1e-6, high=1e-3)
+        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=2)
+        #latent_size = trial.suggest_int('latent_size', low=512, high=2028, step=512)
+        #feature_type = trial.suggest_categorical('feature_type', ['mains', 'combined'])
+        input_norm = trial.suggest_categorical('input_norm', ['z-norm', 'minmax', 'lognorm'])
+        target_norm = trial.suggest_categorical('target_norm', ['z-norm', 'minmax','lognorm'])
+
+
+        return {
+            'in_size': in_size,
+            'out_size': in_size,
+            #'latent_size':latent_size,
+            'learning_rate': learning_rate,
+            'batch_size': batch_size,
+            #'feature_type': feature_type,
+            'input_norm': input_norm,
+            'target_norm': target_norm
+        }
+    
+    @staticmethod
+    def get_template():
+        return  {
+                'backend': 'pytorch',
+                'model_name': 'UNET',
+                'custom_preprocess': None,
+                'feature_type': 'mains',
+                'input_norm': 'z-norm',
+                'target_norm': 'z-norm',
+                'seq_type': 'seq2seq',
+                'learning_rate': 10e-5,
+            }
+
+
 
 class UNETNILMSeq2Quantile(nn.Module):
     """UNET-NILM impelementation with quantile regression
@@ -291,3 +337,47 @@ class UNETNILMSeq2Quantile(nn.Module):
 
         results = {"pred": pred, "q_pred": q_pred, "pred_quantile": pred}
         return results
+
+    @staticmethod
+    def suggest_hparams( trial):
+        """
+        Function returning list of params that will be suggested from optuna
+
+        :param trial: Optuna Trial.
+        :type trial: optuna.trial
+        :return: Parameters with values suggested by optuna
+        :rtype: dict
+        """
+
+        window_length = trial.suggest_int('in_size', low=51, high=560)
+        window_length += 1 if window_length % 2 == 0 else 0
+        learning_rate = trial.suggest_float('learning_rate', low=1e-6, high=1e-3)
+        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=2)
+        latent_size = trial.suggest_int('latent_size', low=512, high=2028, step=512)
+        #feature_type = trial.suggest_categorical('feature_type', ['mains', 'combined'])
+        input_norm = trial.suggest_categorical('input_norm', ['z-norm', 'minmax', 'lognorm'])
+        target_norm = trial.suggest_categorical('target_norm', ['z-norm', 'minmax','lognorm'])
+
+
+        return {
+            'in_size': window_length,
+            'latent_size':latent_size,
+            'learning_rate': learning_rate,
+            'batch_size': batch_size,
+            #'feature_type': feature_type,
+            'input_norm': input_norm,
+            'target_norm': target_norm
+        }
+    
+    @staticmethod
+    def get_template():
+        return  {
+                'backend': 'pytorch',
+                'model_name': 'UNET_quantile',
+                'custom_preprocess': None,
+                'feature_type': 'mains',
+                'input_norm': 'z-norm',
+                'target_norm': 'z-norm',
+                'seq_type': 'seq2quantile',
+                'learning_rate': 10e-5,
+            }

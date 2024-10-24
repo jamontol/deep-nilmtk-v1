@@ -44,10 +44,13 @@ def get_latest_checkpoint(checkpoint_path):
     """
 
     checkpoint_path = str(checkpoint_path)
+    print(f"CHECKPÔINT PATH: {checkpoint_path}")
+
     list_of_files = glob.glob(checkpoint_path + '/*.ckpt')
 
     if list_of_files:
         latest_file = max(list_of_files, key=os.path.getctime)
+        print(f"LATEST FILE {latest_file}")
     else:
         latest_file = None
     return latest_file

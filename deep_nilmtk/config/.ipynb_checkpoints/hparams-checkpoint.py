@@ -44,7 +44,7 @@ def get_exp_parameters():
     parser.add_argument('--experiment_label', default='', type=str)
 
     parser.add_argument('--optimizer', type=str, default='adam', choices=['sgd', 'adam', 'adamw'])
-    parser.add_argument('--weight_decay', type=float, default=0.)
+    parser.add_argument('--weight_decay', type=float, default=0.0)
     parser.add_argument('--momentum', type=float, default=None)
     parser.add_argument('--decay_step', type=int, default=100)
     parser.add_argument('--gamma', type=float, default=0.1)
@@ -81,6 +81,6 @@ def get_exp_parameters():
     parser.add_argument('--checkpoints_path', default="checkpoints", type=str)
     parser.add_argument('--num_workers', default=0, type=int)
     parser.add_argument('--version', default=0, type=int)
-    parser.add_argument("-f", "--fff", help="a dummy argument to fool ipython", default="1")
+    #parser.add_argument("-f", "--fff", help="a dummy argument to fool ipython", default="1")
 
     return parser

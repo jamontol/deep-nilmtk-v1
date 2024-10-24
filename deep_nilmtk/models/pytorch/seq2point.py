@@ -5,11 +5,14 @@ import torch.nn.functional as F
 
 from tqdm import tqdm
 import sys
-from .layers import  create_conv1,  create_linear
-from .bert4nilm import Attention
+from .layers import  create_conv1,  create_linear #, Attention
+#from .bert4nilm import Attention
+from torchnlp.nn.attention import Attention
+
 
 import torch
 import numpy as np
+from torchmetrics.regression import MeanAbsoluteError
 
 from collections import OrderedDict
 
@@ -49,12 +52,12 @@ class S2P(nn.Module):
         :type params: dict
         """
         super(S2P, self).__init__()
-        self.original_len = params['in_size']  if 'in_size' in params else 99
+        #self.original_len = params['in_size']  if 'in_size' in params else 99
         self.target_norm = params['target_norm'] if 'target_norm' in params else 'z-norm'
 
 
     @staticmethod
-    def suggest_hparams( trial):
+    def suggest_hparams(trial):
         """
         Function returning list of params that will be suggested from optuna
 
@@ -64,11 +67,24 @@ class S2P(nn.Module):
         :rtype: dict
         """
 
-        window_length = trial.suggest_int('in_size', low=99, high=560)
+        window_length = trial.suggest_int('in_size', low=51, high=560)
         window_length += 1 if window_length % 2 == 0 else 0
+        learning_rate = trial.suggest_float('learning_rate', low=1e-6, high=1e-3)
+        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=2)
+        #latent_size = trial.suggest_int('latent_size', low=512, high=2028, step=512)
+        #feature_type = trial.suggest_categorical('feature_type', ['mains', 'combined'])
+        input_norm = trial.suggest_categorical('input_norm', ['z-norm', 'minmax', 'lognorm' ])
+        target_norm = trial.suggest_categorical('target_norm', ['z-norm', 'minmax', 'lognorm'])
+
+
         return {
             'in_size': window_length,
-            'outsize':1
+            #'latent_size':latent_size,
+            'learning_rate': learning_rate,
+            'batch_size': batch_size,
+            # 'feature_type': feature_type,
+            'input_norm': input_norm,
+            'target_norm': target_norm
         }
 
     @staticmethod
@@ -76,14 +92,14 @@ class S2P(nn.Module):
         logging.warning('the in_size and max_nb_epochs must be added to the list of this parameters')
         return {
             'backend': 'pytorch',
-            # 'in_size': sequence_length,
+            'custom_preprocess': None,
             'out_size': 1,
             'feature_type': 'mains',
             'input_norm': 'z-norm',
             'target_norm': 'z-norm',
             'seq_type': 'seq2point',
+            'point_position': 'mid_position',
             'learning_rate': 10e-5,
-            'point_position': 'mid_position'
             # 'max_nb_epochs': max_nb_epochs
         }
 
@@ -103,8 +119,9 @@ class S2P(nn.Module):
 
         error = (y - out)
         loss = F.mse_loss(out, y)
-        mae = error.abs().data.mean()
-        return  loss, mae
+        mae =  error.abs().data.mean()
+        #rmse = error.rmse()
+        return  loss, mae #, rmse
 
 
 
@@ -206,17 +223,7 @@ class Seq2Point(S2P):
         self.fc = nn.Sequential(create_linear(50*self.pool_filter, self.latent_size),
                                 nn.Dropout(0.2),
                                 nn.Linear(self.latent_size, self.output_size))
-
-    @staticmethod
-    def get_template():
-        params = S2P.get_template()
-        logging.warning('the in_size and max_nb_epochs must be added to the list of this parameters')
-        params.update({
-            'model_name':'Seq2Pointbaseline'
-
-        })
-        return params
-
+    
     def forward(self, x):
         if x.ndim!=3:
             x = torch.unsqueeze(x, 1)
@@ -231,6 +238,21 @@ class Seq2Point(S2P):
             x= F.relu(x)
 
         return x
+
+
+    @staticmethod
+    def get_template():
+        params = S2P.get_template()
+        logging.warning('the in_size and max_nb_epochs must be added to the list of this parameters')
+        params.update({
+            'model_name':'Seq2Pointbaseline'
+        })
+        return params
+
+    @staticmethod
+    def suggest_hparams(trial):
+        params = S2P.suggest_hparams(trial)
+        return params     
 
 class SAED(S2P):
     def __init__(self, params):
@@ -254,7 +276,7 @@ class SAED(S2P):
             x = x.permute(0, 2, 1)
         x = self.encoder(x)
         x, hn = self.gru(x)
-        x, weights = self.att(x, x)
+        x, weights = self.att(x, x) #, x)
         x = self.decoder(x)
         return x
 
@@ -263,9 +285,21 @@ class SAED(S2P):
         params = S2P.get_template()
         logging.warning('the in_size and max_nb_epochs must be added to the list of this parameters')
         params.update({
-            'model_name': 'SAED_model'
+            'model_name': 'SAED_model',
+            'attention_type': 'general'
         })
         return params
+
+    @staticmethod
+    def suggest_hparams(trial):
+        params = S2P.suggest_hparams(trial)
+        
+        attention_type = trial.suggest_categorical('attention_type', ['dot', 'general'])
+
+        params.update({'attention_type': attention_type})
+
+        return params       
+
 
 class RNN(S2P):
     """
