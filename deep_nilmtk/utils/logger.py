@@ -44,7 +44,7 @@ def get_latest_checkpoint(checkpoint_path):
     """
 
     checkpoint_path = str(checkpoint_path)
-    print(f"CHECKPÔINT PATH: {checkpoint_path}")
+    print(f"CHECKPOINT PATH: {checkpoint_path}")
 
     list_of_files = glob.glob(checkpoint_path + '/*.ckpt')
 

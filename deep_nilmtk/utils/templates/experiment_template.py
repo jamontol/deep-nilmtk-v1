@@ -24,7 +24,7 @@ class ExperimentTemplate:
             params = models[backend][baseline]['model'].get_template()
             # get model training info 
             if models['pytorch'][baseline]['extra_params']['sequence_type'] in ['seq2seq', 'seq2quantile']:
-                model_config['out_size'] = model_config['in_size']
+                params['out_size'] = params['in_size']
             params.update(model_config)
             # get appliance specific activation info
             for aap in self.experiment['app_activation_params'].keys():
