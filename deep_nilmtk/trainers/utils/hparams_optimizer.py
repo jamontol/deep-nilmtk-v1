@@ -28,6 +28,13 @@ class HparamsOptimiser:
         self.appliance_name = appliance_name
         # Use Optuna fot parameter optimisation of the model
         study = optuna.create_study(study_name=self.hparam['exp_name'], direction="minimize")
+        
+        #############Initial params##################
+
+        starting_params = self.starting_params()
+        study.enqueue_trial(starting_params)
+
+        ####################################
         if self.hparam['kfolds'] <= 1:
             # TODO: USE different pruner (defalt is MedianPruner)
             study.optimize(self.objective, n_trials=self.hparam['n_trials'], callbacks=[self.save_best_model])
@@ -40,8 +47,6 @@ class HparamsOptimiser:
         print(f"TRIAL_ID: {study.user_attrs['trial_ID']}")
 
         chkp_path = f'{self.hparam["results_path"]}/{self.hparam["checkpoints_path"]}/{appliance_name}/{self.hparam["template_name"]}/{self.hparam["model_name"]}/version_{self.hparam["version"]}/{study.user_attrs["trial_ID"]}'
-
-        print(f"CHECK_PATH 1: {chkp_path}")
 
         pl_model = self.trainer_impl.load_model(model, chkp_path) if  self.hparam['kfolds'] <= 1 else {
             fold: self.trainer_impl.load_model(model, f'{chkp_path}/{fold+1}') for fold in range(self.hparam['kfolds'])
@@ -98,7 +103,9 @@ class HparamsOptimiser:
                 epochs=self.hparam['max_nb_epochs'],
                 optimizer=self.hparam['optimizer'],
                 learning_rate=self.hparam['learning_rate'],
-                patience_optim=self.hparam['patience_optim'])
+                patience_optim=self.hparam['patience_optim'],
+                validation_metric=self.hparam['validation_metric'])
+            
             self.hparam['version'] = version
             # saving the trained model
             trial.set_user_attr(key='best_run_id', value=mlflow.active_run().info.run_id)
@@ -117,6 +124,18 @@ class HparamsOptimiser:
                              a dictionnary of params suggested by optuna
                              see documentation for more details. ''')
         return suggested_params
+
+    def starting_params(self):
+        starting_params_func = self.model_class.get_template
+        if callable(starting_params_func):
+            starting_params = self.model_class.get_template()
+            self.hparam.update(starting_params)
+        else:
+            raise Exception(''' No params to optimise by optuna
+                             A static function inside the NILM model should provide
+                             a dictionnary of params suggested by optuna
+                             see documentation for more details. ''')
+        return starting_params
 
     def objective_cv(self, trial):
         suggested_params = self.suggest_params(trial)

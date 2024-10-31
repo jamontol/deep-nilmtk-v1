@@ -30,7 +30,7 @@ class Trainer:
 
     def get_dataset(self, main, submain, seq_type,
                     in_size, out_size, point_position,
-                    target_norm, quantiles= None,  loader= None, hparams=None):
+                    target_norm, quantiles= [0.1, 0.25, 0.5, 0.75, 0.90],  loader= None, hparams=None):
         """
         return the datset according the params specified and the DL backend used for training
         :param main: the aggregate power (normalized)
@@ -115,7 +115,8 @@ class Trainer:
                                          optimizer = self.hparams['optimizer'],
                                          learning_rate = self.hparams['learning_rate'],
                                          patience_optim= self.hparams['patience_optim'],
-                                         patience_check=self.hparams['patience_check'])
+                                         patience_check=self.hparams['patience_check'],
+                                         validation_metric=self.hparams['validation_metric'])
 
             self.models[appliance_name] = model
             self.appliance_params[appliance_name] = params
@@ -169,7 +170,7 @@ class Trainer:
     def predict_model(self, mains, model, chkpt, app):
         # load the model from the checkpoint
 
-        model = self.trainer_imp.load_model(model, chkpt, prediction=True)
+        #model = self.trainer_imp.load_model(model, chkpt, prediction=True)
         data, _ = self.trainer_imp.get_dataset(mains, seq_type=self.hparams['seq_type'],
                                             target_norm=self.hparams['target_norm'],
                                             in_size=self.hparams['in_size'],

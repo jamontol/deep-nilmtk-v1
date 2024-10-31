@@ -57,7 +57,7 @@ class TorchTrainer(TrainerImplementor):
     def fit(self, model, dataset,
             chkpt_path=None,exp_name=None,results_path=None, logs_path=None,  version=None,
             batch_size=64, epochs=20, use_checkpoint=False, learning_rate=1e-6, optimizer='adam', patience_optim=5, patience_check=5,
-            train_idx=None, validation_idx=None, auto_lr=False):
+            train_idx=None, validation_idx=None, validation_metric="val_loss", auto_lr=False):
         # Load weights from the last checkpoint if any in the checkpoints path
 
         best_checkpoint = get_latest_checkpoint(f'{results_path}/{chkpt_path}')
@@ -77,7 +77,7 @@ class TorchTrainer(TrainerImplementor):
 
         mlflow.pytorch.autolog()
 
-        trainer = pl.Trainer(logger=logger, # No es necesario para obtner las métricas (automático con logs y callback_metrics)  
+        self.trainer = pl.Trainer(logger=logger, # No es necesario para obtner las métricas (automático con logs y callback_metrics)  
                              max_epochs=epochs,
                              callbacks=callbacks_lst,
                              accelerator="auto",
@@ -89,20 +89,20 @@ class TorchTrainer(TrainerImplementor):
 
         dataset_train, dataset_validation = self.data_split(dataset , batch_size, train_idx, validation_idx)
         # Fit the model using the train_loader, val_loader
-        trainer.fit(pl_model, dataset_train, dataset_validation, ckpt_path=best_checkpoint if use_checkpoint else None)
+        self.trainer.fit(pl_model, dataset_train, dataset_validation, ckpt_path=best_checkpoint if use_checkpoint else None)
 
-        if not use_checkpoint: # No fucniona si e parte de checkpoint
-            val_metric = trainer.callback_metrics["val_loss"].item() #last value
-            print(f"VAL LOSS METRIC:{val_metric}")
+        if not use_checkpoint: # No fucniona si es parte de checkpoint
+            val_metric = self.trainer.callback_metrics[validation_metric].item() #last value
+            print(f"{validation_metric.upper()}:{val_metric}")
         else:
-            val_losses = [metric['val_loss'] for metric in logger.metrics if len(logger.metrics)>1 and 'val_loss' in metric] # metrics logged for all epochs as defined in (PlModel -> validation_step()) and (model -> step())
+            val_losses = [metric[validation_metric] for metric in logger.metrics if len(logger.metrics)>1 and validation_metric in metric] # metrics logged for all epochs as defined in (PlModel -> validation_step()) and (model -> step())
             val_metric = np.min(val_losses) if len(val_losses)>0 else -1 
             # metrics is empty if training starts from best_checkpoint (it is not improved?)     
         return pl_model, val_metric #np.min(val_losses) if len(val_losses)>0 else -1 #min value
 
     def get_dataset(self, main, submain=None, seq_type='seq2point',
                     in_size=99, out_size=1, point_position='mid_position',
-                    target_norm='z-norm', quantiles= None,  loader= None, hparams=None):
+                    target_norm='z-norm', quantiles=[0.1, 0.25, 0.5, 0.75, 0.90],  loader= None, hparams=None):
 
         data = GeneralDataLoader(
             main, targets=submain,
@@ -127,12 +127,18 @@ class TorchTrainer(TrainerImplementor):
         if train_idx is None or val_idx is None:
             train_idx = int(data.len * (1 - 0.15))
             val_idx = data.len - int(data.len * (1 - 0.15))
+            length = train_idx + val_idx
+            print(f"DATA LENGTH 1: {length}")
         else:
-            if isinstance(train_idx,np.ndarray):
+            if isinstance(train_idx, np.ndarray):
                 train_idx = train_idx.shape[0]
                 val_idx = val_idx.shape[0]
-            
+                length = train_idx + val_idx
+                print(f"DATA LENGTH 2: {length}")
         
+        print(f"DATA LENGTH: {data.len}")
+        
+
         train_data, val_data = torch.utils.data.random_split(data,
                                       [train_idx, val_idx],
                                       generator=torch.Generator().manual_seed(3407))
@@ -170,13 +176,13 @@ class TorchTrainer(TrainerImplementor):
     def load_model(self, model, path, prediction= False):
         logging.info(f'Loading Torch models from path :{path}')
 
-        #path = str(self.trainer.checkpoint_callback.best_model_path)
-        #checkpoint = torch.load(path)
+        path = str(self.trainer.checkpoint_callback.best_model_path)
+        checkpoint = torch.load(path)
+        #checkpoint = torch.load(get_latest_checkpoint(path))
 
         print(f"CHECK_PATH: {path}")
         print(f"MODEL TYPE: {type(model)}")
         
-        checkpoint = torch.load(get_latest_checkpoint(path))
 
         state_dict = checkpoint["state_dict"]
         model_state_dict = model.state_dict()
@@ -200,19 +206,13 @@ class TorchTrainer(TrainerImplementor):
         if not isinstance(model, PlModel):
             pl_model = PlModel(model)
         else:
-            pl_model = model
+            path = str(self.trainer.checkpoint_callback.best_model_path)
+            pl_model = PlModel.load_from_checkpoint(path, testing = False, net=model)
 
-        #pl_model.load_state_dict(checkpoint['state_dict'])
         pl_model.eval()
 
         return pl_model
-        print('LOADED')
-        
-        """      
-        pl_model = PlModel.load_from_checkpoint(path, testing = False, net=model)
-        pl_model.eval()
-        return pl_model
-        """
+       
        
 
        

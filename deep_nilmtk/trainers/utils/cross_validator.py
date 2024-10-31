@@ -69,7 +69,8 @@ class CrossValidator:
                     optimizer=hparams['optimizer'],
                     learning_rate=hparams['learning_rate'],
                     patience_optim=hparams['patience_optim'],
-                    train_idx=train_idx, validation_idx=valid_idx
+                    train_idx=train_idx, validation_idx=valid_idx,
+                    validation_metric=hparams['validation_metric']
                 )
                 run_id= mlflow.active_run().info.run_id
                 best_losses.append(loss)
