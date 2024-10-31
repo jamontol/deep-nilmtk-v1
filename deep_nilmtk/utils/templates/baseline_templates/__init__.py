@@ -1,9 +1,13 @@
 from .ukdale_template import *
 from .redd_template import *
 from .hipe_template import *
+from .hipe_template_agg import *
 
 templates = {
     'hipe_aggregated_15min': hipe_aggregated_15min,
+    'hipe_aggregated_15min_agg': hipe_aggregated_15min_agg,
+    'hipe_aggregated_5min_agg': hipe_aggregated_5min_agg,
+    'hipe_aggregated_5min_agg_noise': hipe_aggregated_5min_agg_noise,
     'uk_dale_acts_from_paper': uk_dale_acts_from_paper,
     'uk_dale_acts_from_paper_kfold3': uk_dale_acts_from_paper_kfold3,
     'uk_dale_acts_from_repo': uk_dale_acts_from_repo,

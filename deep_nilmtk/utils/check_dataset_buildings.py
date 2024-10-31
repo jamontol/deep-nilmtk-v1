@@ -20,7 +20,12 @@ building_info = {
              ('oven', 2): [1],
              ('oven', 3): [1],
             'printer': [1],
-            'washing machine': [1]}
+            'washing machine': [1]},
+    'hipe_agg': {('motor',1) : [1],
+             ('motor',2) : [1],
+             ('oven', 1): [1],
+            'printer': [1]
+            }
     }
 
 

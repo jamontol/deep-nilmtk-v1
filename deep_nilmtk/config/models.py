@@ -69,10 +69,10 @@ __models__ = {
             'UNET': {
                 'model': TorchModels.UNETNILM,
                  'loader': TorchLoader.GeneralDataLoader,
-                'extra_params': {'sequence_type': 'seq2seq'}
+                'extra_params': {'sequence_type': 'seq2point'}
             },
             'UNET_quantile': {
-                'model': TorchModels.UNETNILM,
+                'model': TorchModels.UNETNILMSeq2Quantile,
                  'loader': TorchLoader.GeneralDataLoader,
                 'extra_params': {'sequence_type': 'seq2quantile'}
             }

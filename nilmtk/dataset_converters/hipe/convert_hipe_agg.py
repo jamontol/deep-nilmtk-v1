@@ -53,7 +53,7 @@ def _convert(input_path,
              sort_index=True,
              drop_duplicates=False,
              use_columns=["SensorDateTime", "P_kW"]):
-    
+    """
     meter_to_machine = {
         1: "MainTerminal",
         2: "ChipPress",
@@ -66,6 +66,21 @@ def _convert(input_path,
         9: "VacuumPump1",
         10: "VacuumPump2",
         11: "WashingMachine",
+    }
+    """
+    
+    meter_to_machine = {
+        1: "MainTerminal",
+        #2: "ChipPress",
+        2: "ChipSaw",
+        3: "HighTemperatureOven",
+        #5: "PickAndPlaceUnit",
+        4: "ScreenPrinter",
+        #7: "SolderingOven",
+        #8: "VacuumOven",
+        5: "VacuumPump1",
+        #10: "VacuumPump2",
+        #11: "WashingMachine",
     }
 
     check_directory_exists(input_path)
@@ -119,7 +134,7 @@ def _load_csv(filename, measurements, drop_duplicates=False, sort_index=False, u
     return df.abs()  # only positive loads
 
 
-def main(file_in, file_out, use_columns=["id", "P_kW__mean"], metadata_path="metadata_15min"):
+def main(file_in, file_out, use_columns=["id", "P_kW__mean"], metadata_path="metadata_5min_agg"):
     print(f"Output {file_out}")
     convert_hipe(file_in, file_out, use_columns=use_columns, metadata_path=metadata_path)
 
