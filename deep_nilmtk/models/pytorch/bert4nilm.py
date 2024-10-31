@@ -469,7 +469,37 @@ class BERT4NILM(nn.Module):
         which have been cutoff by specified appliance thresholds
         (logits_status)
     """ 
-        
+
+    @staticmethod
+    def suggest_hparams(trial):
+        """
+        Function returning list of params that will be suggested from optuna
+
+        :param trial: Optuna Trial.
+        :type trial: optuna.trial
+        :return: Parameters with values suggested by optuna
+        :rtype: dict
+        """
+
+        window_length = trial.suggest_int('in_size', low=128, high=480)
+        learning_rate = trial.suggest_float('learning_rate', low=1e-6, high=1e-3)
+        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=32)
+        latent_size = trial.suggest_int('latent_size', low=512, high=2028, step=512)
+        #feature_type = trial.suggest_categorical('feature_type', ['mains', 'combined'])
+        input_norm = trial.suggest_categorical('input_norm', ['z-norm', 'minmax', 'lognorm' ])
+        target_norm = trial.suggest_categorical('target_norm', ['z-norm', 'minmax', 'lognorm'])
+
+
+        return {
+            'in_size': window_length,
+            'latent_size':latent_size,
+            'batch_size': batch_size,
+            # 'feature_type': feature_type,
+            'input_norm': input_norm,
+            'target_norm': target_norm,
+            'learning_rate': learning_rate,
+
+        }  
         
     @staticmethod
     def get_template():
@@ -485,8 +515,13 @@ class BERT4NILM(nn.Module):
             'learning_rate': 10e-5,
             'point_position': 'mid_position',
             'custom_preprocess': 'bert_preprocess',
-            'custom_postprocess': 'bert_postprocess'
+            'custom_postprocess': 'bert_postprocess',
 
-            
+            'in_size': 99, #480,
+            'latent_size': 1024,
+            'batch_size': 64,
+            'input_norm': 'z-norm',
+            'target_norm': 'z-norm'
+
         }
 

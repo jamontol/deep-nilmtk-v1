@@ -51,7 +51,7 @@ class S2S(nn.Module):
         super(S2S, self).__init__()
 
         self.original_len = params['in_size']  if 'in_size' in params else 99
-        self.original_len += params['out_size'] # if 'out_size' in params else 0
+        self.original_len += params['out_size'] if 'out_size' in params else 0
         #self.original_len += params['out_size']  if 'out_size' in params else 0
         self.target_norm = params['target_norm'] if 'target_norm' in params else 'z-norm'
         self.mean = params['mean'] if 'mean' in params else 0
@@ -132,11 +132,11 @@ class S2S(nn.Module):
         :rtype: dict
         """
 
-        in_size = trial.suggest_int('in_size', low=51, high=560)
-        #window_length += 1 if window_length % 2 == 0 else 0
+        in_size = trial.suggest_int('in_size', low=99, high=480)
+        in_size += 1 if in_size % 2 == 0 else 0
         learning_rate = trial.suggest_float('learning_rate', low=1e-6, high=1e-3)
-        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=2)
-        #latent_size = trial.suggest_int('latent_size', low=512, high=2028, step=512)
+        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=32)
+        latent_size = trial.suggest_int('latent_size', low=512, high=2028, step=512)
         #feature_type = trial.suggest_categorical('feature_type', ['mains', 'combined'])
         input_norm = trial.suggest_categorical('input_norm', ['z-norm', 'minmax', 'lognorm'])
         target_norm = trial.suggest_categorical('target_norm', ['z-norm', 'minmax', 'lognorm'])
@@ -144,7 +144,7 @@ class S2S(nn.Module):
         return {
             'in_size': in_size,
             'out_size': in_size,
-            #'latent_size':latent_size,
+            'latent_size':latent_size,
             'learning_rate': learning_rate,
             'batch_size': batch_size,
             #'feature_type': feature_type,
@@ -163,6 +163,13 @@ class S2S(nn.Module):
                 'target_norm': 'z-norm',
                 'seq_type': 'seq2seq',
                 'learning_rate': 10e-5,
+
+                'in_size': 99,
+                'out_size': 99,
+                'latent_size': 1024,
+                'batch_size': 64,
+
+                # 'max_nb_epochs': max_nb_epochs
             }
 
 

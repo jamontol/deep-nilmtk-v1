@@ -67,24 +67,23 @@ class S2P(nn.Module):
         :rtype: dict
         """
 
-        window_length = trial.suggest_int('in_size', low=51, high=560)
+        window_length = trial.suggest_int('in_size', low=99, high=560)
         window_length += 1 if window_length % 2 == 0 else 0
         learning_rate = trial.suggest_float('learning_rate', low=1e-6, high=1e-3)
-        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=2)
+        batch_size = trial.suggest_int('batch_size', low=32, high=128, step=32)
         #latent_size = trial.suggest_int('latent_size', low=512, high=2028, step=512)
         #feature_type = trial.suggest_categorical('feature_type', ['mains', 'combined'])
         input_norm = trial.suggest_categorical('input_norm', ['z-norm', 'minmax', 'lognorm' ])
         target_norm = trial.suggest_categorical('target_norm', ['z-norm', 'minmax', 'lognorm'])
 
-
         return {
             'in_size': window_length,
             #'latent_size':latent_size,
-            'learning_rate': learning_rate,
             'batch_size': batch_size,
             # 'feature_type': feature_type,
             'input_norm': input_norm,
-            'target_norm': target_norm
+            'target_norm': target_norm,
+            'learning_rate': learning_rate,
         }
 
     @staticmethod
@@ -100,6 +99,11 @@ class S2P(nn.Module):
             'seq_type': 'seq2point',
             'point_position': 'mid_position',
             'learning_rate': 10e-5,
+
+            'in_size': 99,
+            'latent_size': 1024,
+            'batch_size': 64,
+
             # 'max_nb_epochs': max_nb_epochs
         }
 
